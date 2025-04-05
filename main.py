@@ -2,12 +2,13 @@
 import os
 import json
 import datetime as dt
+import pandas as pd
 
-
-# global variables
+# GLOBAL VARIABLES
 curr_dir = os.getcwd()
 
 
+# HELPER FUNCTIONS
 def check_json():
     """
     Checks if the tasks.json file exists, if not creates it
@@ -41,6 +42,23 @@ def load_json_w(data):
         return None
 
 
+def pandify_json():
+    data = load_json_r()
+    # create a pandas dataframe and format the columns
+    columns = ["ID", "Description", "Status", "Created At", "Updated At"]
+    task_df = pd.DataFrame(data["tasks"])
+    task_df.columns = columns
+    # make date columns more readable
+    task_df["Created At"] = pd.to_datetime(task_df["Created At"]).dt.strftime(
+        "%Y-%m-%d %H:%M"
+    )
+    task_df["Updated At"] = pd.to_datetime(task_df["Updated At"]).dt.strftime(
+        "%Y-%m-%d %H:%M"
+    )
+    return task_df
+
+
+# MAIN FUNCTIONS (CRUD)
 def add_task(description):
     """
     Adds a task to the tasks.json file
@@ -49,6 +67,7 @@ def add_task(description):
     """
     # check if the tasks.json file exists, if not it makes it
     check_json()
+
     # add a unique id, description, status, createdAt, and updatedAt values to the json file
     data = load_json_r()
     task_id = len(data["tasks"]) + 1  # unique id calculation
@@ -59,8 +78,8 @@ def add_task(description):
         "createdAt": str(dt.datetime.now()),  # get current time
         "updatedAt": str(dt.datetime.now()),
     }
-
     data["tasks"].append(task)
+
     load_json_w(data)
     return f"Task {task_id} added."
 
@@ -74,6 +93,7 @@ def update_task(task_id, description):
     """
     # check if the tasks.json file exists, if not it makes it
     check_json()
+
     # read the json file and update the task with the id
     data = load_json_r()
     for task in data["tasks"]:
@@ -82,7 +102,7 @@ def update_task(task_id, description):
             task["updatedAt"] = str(dt.datetime.now())  # update the updatedAt value
             break
         else:
-            return f"Task {task_id} not found."  # if task is not found
+            return f"Task {task_id} not found."  # if task is not found, end function
 
     # write the updated json file
     load_json_w(data)
@@ -147,31 +167,31 @@ def mark_in_progress(task_id):
         return f"Task {task_id} marked as in-progress"
 
 
-def mark_completed(task_id):
+def mark_done(task_id):
     """
-    Marks a task as completed
-    :param task_id: The id of the task to be marked as completed
+    Marks a task as done
+    :param task_id: The id of the task to be marked as done
     :return: Output message
     """
     # check if the tasks.json file exists, if not it makes it
     check_json()
 
-    # read the json file and update the task as completed
+    # read the json file and update the task as done
     data = load_json_r()
     flag = 0
     for task in data["tasks"]:
-        if task["id"] == task_id and task["status"] != "completed":
-            task["status"] = "completed"
+        if task["id"] == task_id and task["status"] != "done":
+            task["status"] = "done"
             flag = 1
             break
 
-    # if task is not found or already completed, return message
+    # if task is not found or already done, return message
     if flag == 0:
-        return f"Task: {task_id} not found or already completed"
+        return f"Task: {task_id} not found or already done"
     # else, write the updated json file
     else:
         load_json_w(data)
-        return f"Task {task_id} marked as completed"
+        return f"Task {task_id} marked as done"
 
 
 def mark_todo(task_id):
@@ -201,4 +221,25 @@ def mark_todo(task_id):
         return f"Task {task_id} marked as to-do"
 
 
-print(mark_completed(1))
+def list_tasks(status=None):
+    """
+    Lists all the tasks in the tasks.json file
+    :param status: The status of the tasks to be listed
+    :return: The tasks in the tasks.json file
+    """
+    # check if the tasks.json file exists, if not it makes it
+    check_json()
+
+    # read the json file and filter the tasks that are in the given status
+    task_df = pandify_json()
+
+    if status == "to-do":
+        task_df = task_df[task_df["Status"] == "to-do"]
+    elif status == "in-progress":
+        task_df = task_df[task_df["Status"] == "in-progress"]
+
+    return task_df.to_string(index=False)  # print the tasks in a table format
+
+
+df = list_tasks()
+print(df)
