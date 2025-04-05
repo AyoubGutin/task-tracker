@@ -75,35 +75,38 @@ def update_task(task_id, description):
 
 
 def delete_task(task_id):
+    """
+    Deletes a task from the tasks.json file
+    :param task_id: The id of the task to be deleted
+    :return: Output message
+    """
     # check if the tasks.json file exists, if not it makes it
     check_json()
 
     # read the json file and delete the task with the id
     with open("tasks.json", "r") as f:
-        deleted = 0
+        deleted = 0  # flag to check if task is deleted
         data = json.load(f)
         for task in data["tasks"]:
-            if task["id"] == task_id:
+            if task["id"] == task_id:  # if task is found, delete it
                 data["tasks"].remove(task)
-                deleted = 1
+                deleted = 1  # update the flag
+                break
 
-        if deleted == 0:
-            return f"Task {task_id} not found."
+    if deleted == 0:
+        return f"Task {task_id} not found."  # if task is not found, end funciton
 
     # write the updated json file
     with open("tasks.json", "w") as f:
         json.dump(data, f, indent=4)
 
-    # update the id of the tasks
+    # update the unique id of the tasks
     with open("tasks.json", "r") as f:
         data = json.load(f)
-        for i, task in enumerate(data["tasks"]):
-            task["id"] = i + 1
+        for i, task in enumerate(data["tasks"]):  # loop through tasks with the index
+            task["id"] = i + 1  # update the id to be unique
 
     # write the updated json file
     with open("tasks.json", "w") as f:
         json.dump(data, f, indent=4)
         return f"Task {task_id} deleted."
-
-
-delete_task(2)
