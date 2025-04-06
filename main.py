@@ -64,27 +64,44 @@ def pandify_json():
     data = load_json_r()
     # create a pandas dataframe and format the columns
     columns = ["ID", "Description", "Status", "Created At", "Updated At"]
-    task_df = pd.DataFrame(data["tasks"])
-    task_df.columns = columns
-    # make date columns more readable
-    task_df["Created At"] = pd.to_datetime(task_df["Created At"]).dt.strftime(
-        "%Y-%m-%d %H:%M"
-    )
-    task_df["Updated At"] = pd.to_datetime(task_df["Updated At"]).dt.strftime(
-        "%Y-%m-%d %H:%M"
-    )
-    return task_df
+    try:
+        # create a pandas dataframe from the json data
+        task_df = pd.DataFrame(data["tasks"])
+        task_df.columns = columns
+        task_df["Created At"] = pd.to_datetime(task_df["Created At"]).dt.strftime(
+            "%Y-%m-%d %H:%M"
+        )
+        task_df["Updated At"] = pd.to_datetime(task_df["Updated At"]).dt.strftime(
+            "%Y-%m-%d %H:%M"
+        )
+        return task_df
+    except ValueError:
+        return None
+
+
+# DECORATORS
+def json_exists(func):
+    """
+    Decorator to check if the tasks.json file exists
+    :param func: The function to be decorated
+    :return: The decorated function
+    """
+
+    def wrapper(*args, **kwargs):
+        check_json()
+        return func(*args, **kwargs)
+
+    return wrapper
 
 
 # MAIN FUNCTIONS (CRUD)
+@json_exists
 def add_task(description):
     """
     Adds a task to the tasks.json file
     :param task: The task to be added
     :return: Output message
     """
-    # check if the tasks.json file exists, if not it makes it
-    check_json()
 
     # add a unique id, description, status, createdAt, and updatedAt values to the json file
     data = load_json_r()
@@ -102,6 +119,7 @@ def add_task(description):
     return f"Task {task_id} added."
 
 
+@json_exists
 def update_task(task_id, description):
     """
     Updates a task in the tasks.json file
@@ -109,9 +127,6 @@ def update_task(task_id, description):
     :param description: The new description of the task
     :return: Output message
     """
-    # check if the tasks.json file exists, if not it makes it
-    check_json()
-
     # read the json file and update the task with the id
     data = load_json_r()
     for task in data["tasks"]:
@@ -127,15 +142,13 @@ def update_task(task_id, description):
     return f"Task {task_id} updated."
 
 
+@json_exists
 def delete_task(task_id):
     """
     Deletes a task from the tasks.json file
     :param task_id: The id of the task to be deleted
     :return: Output message
     """
-    # check if the tasks.json file exists, if not it makes it
-    check_json()
-
     # read the json file and delete the task with the id
     data = load_json_r()
     deleted = 0  # flag to check if task is deleted
@@ -160,15 +173,13 @@ def delete_task(task_id):
     return f"Task {task_id} deleted."
 
 
+@json_exists
 def mark_in_progress(task_id):
     """
     Marks a task as in progress
     :param task_id: The id of the task to be marked as in progress
     :return: Output message
     """
-    # check if the tasks.json file exists, if not it makes it
-    check_json()
-
     # read the json file and update the task as in-progress
     data = load_json_r()
     flag = 0
@@ -185,15 +196,13 @@ def mark_in_progress(task_id):
         return f"Task {task_id} marked as in-progress"
 
 
+@json_exists
 def mark_done(task_id):
     """
     Marks a task as done
     :param task_id: The id of the task to be marked as done
     :return: Output message
     """
-    # check if the tasks.json file exists, if not it makes it
-    check_json()
-
     # read the json file and update the task as done
     data = load_json_r()
     flag = 0
@@ -212,15 +221,13 @@ def mark_done(task_id):
         return f"Task {task_id} marked as done"
 
 
+@json_exists
 def mark_todo(task_id):
     """
     Marks a task as to-do
     :param task_id: The id of the task to be marked as to-do
     :return: Output message
     """
-    # check if the tasks.json file exists, if not it makes it
-    check_json()
-
     # read the json file and update the task as to-do
     data = load_json_r()
     flag = 0
@@ -239,22 +246,25 @@ def mark_todo(task_id):
         return f"Task {task_id} marked as to-do"
 
 
+@json_exists
 def list_tasks(status=None):
     """
     Lists all the tasks in the tasks.json file
     :param status: The status of the tasks to be listed
     :return: The tasks in the tasks.json file
     """
-    # check if the tasks.json file exists, if not it makes it
-    check_json()
-
     # read the json file and filter the tasks that are in the given status
     task_df = pandify_json()
+
+    if task_df is None:  # if the dataframe is empty, return message
+        return "No tasks found."
 
     if status == "to-do":
         task_df = task_df[task_df["Status"] == "to-do"]
     elif status == "in-progress":
         task_df = task_df[task_df["Status"] == "in-progress"]
+    elif status == "done":
+        task_df = task_df[task_df["Status"] == "done"]
 
     return task_df.to_string(index=False)  # print the tasks in a table format
 
@@ -327,6 +337,7 @@ def main():
         elif command[0] == "exit":  # if the user enters exit, exit the program
             print("Exiting Task Tracker. Goodbye!")
             break
+
         else:
             print('Invalid command. Type "help" for a list of commands.')
 
