@@ -1,1 +1,7 @@
 .DS_Store
+.venv/
+*.pyc
+*.egg-info/
+pyproject.toml 
+tasks.json 
+__pycache__/

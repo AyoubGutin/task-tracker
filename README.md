@@ -26,7 +26,8 @@ I am making this project, as I would like a local to-do list that is configured 
 - updatedAt: Last update timestamp - datetime object
 
 ### Usage
-Run the CLI from terminal using python main.py **insert command and arguments**
+Run the CLI from terminal using python main.py
+`Enter command:`  **insert command and arguments**
 
 #### Command	Description	Example
 ---
