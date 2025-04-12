@@ -1,192 +1,101 @@
-import datetime as dt
-from task_tracker.helper import load_json_r, load_json_w, check_json, pandify_json
+# MODULES
+from task_tracker.models import sessionLocal, Task
 
 
-# DECORATORS
-def json_exists(func):
+# UTILITY
+def get_db():
     """
-    Decorator to check if the tasks.json file exists
-    :param func: The function to be decorated
-    :return: The decorated function
+    Generator function to create a new database session
     """
+    db = sessionLocal()
+    try:
+        yield db  # pass the database session to the caller
+    finally:
+        db.close()  # close the session when the caller is done
 
-    def wrapper(*args, **kwargs):
-        check_json()
-        return func(*args, **kwargs)
 
-    return wrapper
+# HELPERS
+def get_task(task_id: int, db: sessionLocal):
+    return db.query(Task).filter(Task.id == task_id).first()
 
 
 # MAIN FUNCTIONS (CRUD)
-@json_exists
-def add_task(description):
+def add_task(description: str, db: sessionLocal):
     """
-    Adds a task to the tasks.json file
+    Adds a task to the database
     :param task: The task to be added
+    :param db: database session
     :return: Output message
     """
-
-    # add a unique id, description, status, createdAt, and updatedAt values to the json file
-    data = load_json_r()
-    task_id = len(data["tasks"]) + 1  # unique id calculation
-    task = {  # task object to be added to json
-        "id": task_id,
-        "description": description,
-        "status": "to-do",
-        "createdAt": str(dt.datetime.now()),  # get current time
-        "updatedAt": str(dt.datetime.now()),
-    }
-    data["tasks"].append(task)
-
-    load_json_w(data)
-    return f"Task {task_id} added."
+    db_task = Task(
+        description=description
+    )  # new instance of the Task model, passing the description
+    db.add(
+        db_task
+    )  #  add new task object to the database session, which then inserts it into the table using db.commit
+    db.commit()
+    db.refresh(db_task)
+    return f'Task {db_task.id} added.'
 
 
-@json_exists
-def update_task(task_id, description):
+def update_task_description(task_id, description, db: sessionLocal):
     """
-    Updates a task in the tasks.json file
+    Updates a task
     :param task_id: The id of the task to be updated
     :param description: The new description of the task
+    :param db: Database session
     :return: Output message
     """
-    # read the json file and update the task with the id
-    data = load_json_r()
-    for task in data["tasks"]:
-        if task["id"] == task_id:  # if task is found
-            task["description"] = description  # update the description
-            task["updatedAt"] = str(dt.datetime.now())  # update the updatedAt value
-            break
-        else:
-            return f"Task {task_id} not found."  # if task is not found, end function
-
-    # write the updated json file
-    load_json_w(data)
-    return f"Task {task_id} updated."
+    db_task = get_task(task_id, db)
+    if db_task:
+        db_task.description = description
+        db.commit()
+        return f'Task {task_id} updated description'
+    else:
+        return f'Task {task_id} not found in the database'
 
 
-@json_exists
-def delete_task(task_id):
+def delete_task(task_id: int, db: sessionLocal):
     """
-    Deletes a task from the tasks.json file
+    Deletes a task
     :param task_id: The id of the task to be deleted
+    :param db: Database session
     :return: Output message
     """
-    # read the json file and delete the task with the id
-    data = load_json_r()
-    deleted = 0  # flag to check if task is deleted
-    for task in data["tasks"]:
-        if task["id"] == task_id:  # if task is found, delete it
-            data["tasks"].remove(task)
-            deleted = 1  # update the flag
-            break
-
-    if deleted == 0:
-        return f"Task {task_id} not found."  # if task is not found, end funciton
-
-    # write the updated json file
-    load_json_w(data)
-
-    # update the unique id of the tasks
-    for i, task in enumerate(data["tasks"]):  # loop through tasks with the index
-        task["id"] = i + 1  # update the id to be unique
-
-    # write the updated json file
-    load_json_w(data)
-    return f"Task {task_id} deleted."
-
-
-@json_exists
-def mark_in_progress(task_id):
-    """
-    Marks a task as in progress
-    :param task_id: The id of the task to be marked as in progress
-    :return: Output message
-    """
-    # read the json file and update the task as in-progress
-    data = load_json_r()
-    flag = 0
-    for task in data["tasks"]:
-        if task["id"] == task_id and task["status"] != "in-progress":
-            task["status"] = "in-progress"
-            flag = 1
-            break
-
-    if flag == 0:
-        return f"Task: {task_id} not found or already in progress"
+    db_task = get_task(task_id, db)
+    if db_task:
+        db.delete(db_task)
+        db.commit()
+        return f'Task {task_id} deleted'
     else:
-        load_json_w(data)  # write the updated json file
-        return f"Task {task_id} marked as in-progress"
+        return f'Task {task_id} not found in the database'
 
 
-@json_exists
-def mark_done(task_id):
+def update_task_status(task_id: int, status: str, db: sessionLocal):
     """
-    Marks a task as done
-    :param task_id: The id of the task to be marked as done
+    Marks a task with the status passed
+    :param task_id: The id of the task
+    :param status: The status of the task
+    :param db: Database session
     :return: Output message
     """
-    # read the json file and update the task as done
-    data = load_json_r()
-    flag = 0
-    for task in data["tasks"]:
-        if task["id"] == task_id and task["status"] != "done":
-            task["status"] = "done"
-            flag = 1
-            break
-
-    # if task is not found or already done, return message
-    if flag == 0:
-        return f"Task: {task_id} not found or already done"
-    # else, write the updated json file
+    db_task = get_task(task_id, db)
+    if db_task:
+        db_task.status = status
+        db.commit()
+        return f'Task {task_id} updated status'
     else:
-        load_json_w(data)
-        return f"Task {task_id} marked as done"
+        return f'Task {task_id} not found in the database'
 
 
-@json_exists
-def mark_todo(task_id):
+def list_tasks(db: sessionLocal, status=None):
     """
-    Marks a task as to-do
-    :param task_id: The id of the task to be marked as to-do
-    :return: Output message
-    """
-    # read the json file and update the task as to-do
-    data = load_json_r()
-    flag = 0
-    for task in data["tasks"]:
-        if task["id"] == task_id and task["status"] != "to-do":
-            task["status"] = "to-do"
-            flag = 1
-            break
-
-    # if task is not found or already to-do, return message
-    if flag == 0:
-        return f"Task: {task_id} not found or already to-do"
-    # else, write the updated json file
-    else:
-        load_json_w(data)
-        return f"Task {task_id} marked as to-do"
-
-
-@json_exists
-def list_tasks(status=None):
-    """
-    Lists all the tasks in the tasks.json file
+    Lists all the tasks
     :param status: The status of the tasks to be listed
-    :return: The tasks in the tasks.json file
+    :param db: Database session
+    :return: The tasks in the database
     """
-    # read the json file and filter the tasks that are in the given status
-    task_df = pandify_json()
-
-    if task_df is None:  # if the dataframe is empty, return message
-        return "No tasks found."
-
-    if status == "to-do":
-        task_df = task_df[task_df["Status"] == "to-do"]
-    elif status == "in-progress":
-        task_df = task_df[task_df["Status"] == "in-progress"]
-    elif status == "done":
-        task_df = task_df[task_df["Status"] == "done"]
-
-    return task_df.to_string(index=False)  # print the tasks in a table format
+    query = db.query(Task)  # query targeting Task model
+    if status:
+        query = query.filter(Task.status == status)  # filter by status
+    return query.all()  # return the query
