@@ -95,3 +95,18 @@ def test_mark_done(add_test_task):
         assert data['tasks'][0]['status'] == 'done'
     message = core.mark_done(task_id)
     assert message == f'Task: {task_id} not found or already done'
+
+
+def test_mark_in_progress(add_test_task):
+    """
+    Test case for marking a test as in progress
+    """
+    task_id = add_test_task
+    message = core.mark_in_progress(task_id)
+    assert message == f'Task {task_id} marked as in-progress'
+    with open('tasks.json', 'r') as f:
+        data = json.load(f)
+        assert data['tasks'][0]['id'] == task_id
+        assert data['tasks'][0]['status'] == 'in-progress'
+    message = core.mark_in_progress(task_id)
+    assert message == f'Task: {task_id} not found or already in progress'
