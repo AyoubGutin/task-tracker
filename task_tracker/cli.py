@@ -6,7 +6,9 @@ from task_tracker.core import (
     list_tasks,
     get_db,
 )
-from contextlib import contextmanager
+from contextlib import (
+    contextmanager,
+)  # manages resources like a database session using a with statement, that allows commits, rollbacks, and closed sessions without manual management
 
 
 def help():
@@ -31,15 +33,15 @@ def session_scope():
     """
     Transactional scope around operations
     """
-    db = next(get_db())
+    db = next(get_db())  # call on get_db until it hits the yield line
     try:
-        yield db
-        db.commit()
+        yield db  # suspend execution and return value of db to caller
+        db.commit()  # commit changes
     except Exception:
-        db.rollback()
+        db.rollback()  # undo changes
         raise
     finally:
-        db.close()
+        db.close()  # close the conneciton
 
 
 def handle_command(command, func, status=None):
@@ -83,7 +85,9 @@ def main():
             command[0] == 'add' and len(command) > 1
         ):  # if the user enters add, add the task
             description = ''.join(command[1:])
-            with session_scope() as db:
+            with (
+                session_scope() as db
+            ):  # return the session, execute add task function, then close sesison.
                 print(add_task(description, db=db))
         elif (
             command[0] == 'update' and len(command) > 2
