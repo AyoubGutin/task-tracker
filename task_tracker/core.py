@@ -16,7 +16,11 @@ def get_db():
 
 # HELPERS
 def get_task(task_id: int, db: sessionLocal):
-    return db.query(Task).filter(Task.id == task_id).first()
+    task = db.get(Task, task_id)
+    if task:
+        return task
+    else:
+        return f'Task: {task_id} not found in the database'
 
 
 # MAIN FUNCTIONS (CRUD)
@@ -35,7 +39,7 @@ def add_task(description: str, db: sessionLocal):
     )  #  add new task object to the database session, which then inserts it into the table using db.commit
     db.commit()
     db.refresh(db_task)
-    return f'Task {db_task.id} added.'
+    return f'Task {db_task.id} added'
 
 
 def update_task_description(task_id, description, db: sessionLocal):

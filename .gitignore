@@ -3,5 +3,5 @@
 *.pyc
 *.egg-info/
 pyproject.toml 
-tasks.json 
 __pycache__/
+tasks.db

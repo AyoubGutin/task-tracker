@@ -1,112 +1,101 @@
-# BASIC TESTING
-
 # MODULES
-import pytest
-import json
-import os
 import sys
+import os
 
-# Get the absolute path to the project root directory
-ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(ROOT_DIR)
-from task_tracker import core
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from task_tracker.models import Base, Task
+from task_tracker.core import (
+    add_task,
+    get_task,
+    update_task_description,
+    update_task_status,
+    delete_task,
+    list_tasks,
+    get_db,
+)
+
+# SQLite DB for Testing
+TEST_DB_URL = 'sqlite:///:memory:'
 
 
 # FIXTURES
-@pytest.fixture
-def empty_json():
+# For each test function, make a new in memory db with the Task table, a new db session, and thenm close the session.
+@pytest.fixture(scope='function')  # exectued once per test function
+def test_engine():
     """
-    Fixture to create an empty JSON file for testing.
+    Fixture for a SQLAlchemy engine for testing
     """
-    if os.path.exists('tasks.json'):
-        os.remove('tasks.json')
+    engine = create_engine(TEST_DB_URL)  # create database engine
+    Base.metadata.create_all(engine)  # create tables
+    yield engine  # provide the engine to the test functions that need it (test_session)
+    Base.metadata.drop_all(
+        engine
+    )  # after all test functions that used this fixture finish, drop the tables
 
 
-@pytest.fixture
-def add_test_task(empty_json):
+@pytest.fixture(scope='function')
+def test_session(test_engine):
     """
-    Add a test task to the JSON file.
+    Fixture for a SQLAlchemy session for testing
     """
-    description = 'Test task'
-    core.add_task(description)
-    with open('tasks.json', 'r') as f:
-        data = json.load(f)
-        return data['tasks'][-1]['id']
+    testingSessionLocal = sessionmaker(
+        autocommit=False, autoflush=False, bind=test_engine
+    )  # databse factory to manage the session
+    session = testingSessionLocal()  # new instance of the session
+    try:
+        yield session  # returns session object to the test functions
+    finally:
+        session.close()  # close after finish
 
 
-# Test case for adding a task
-def test_add_task(empty_json):
+# TESTS
+def test_add_task(test_session):
     """
     Test case for adding a task
     """
-
     description = 'Buy groceries for tonight'
-    message = core.add_task(description)
-    assert message == 'Task 1 added.'
+    message = add_task(description, db=test_session)
+    assert message == 'Task 1 added'
 
-    # verify task was inputted into the JSON
-    with open('tasks.json', 'r') as f:
-        data = json.load(f)
-        assert len(data['tasks']) == 1
-
-        assert data['tasks'][0]['description'] == description
-        assert data['tasks'][0]['status'] == 'to-do'
-        assert data['tasks'][0]['id'] == 1
-        assert data['tasks'][0]['createdAt'] != None
-        assert data['tasks'][0]['updatedAt'] != None
+    task = test_session.query(Task).first()  # query for new task
+    assert task.description == description
 
 
-def test_remove_task(add_test_task):
+def test_get_task_exists(test_session):
+    """
+    Test case for retrieving an existing task
+    """
+    task = Task(description='Existing Task')
+    test_session.add(task)
+    test_session.commit()
+
+    retrieved_task = get_task(1, db=test_session)
+    assert retrieved_task is not None
+    assert retrieved_task.description == 'Existing Task'
+
+
+def test_get_task_not_exists(test_session):
+    """
+    Test case for retrieving a task that does not exist
+    """
+    message = get_task(839, db=test_session)
+    assert message == 'Task: 839 not found in the database'
+
+
+def test_delete_task(test_session):
     """
     Test case for removing a task
     """
-    task_id = add_test_task
-    message = core.delete_task(task_id)
-    assert message == f'Task {task_id} deleted.'
-    with open('tasks.json', 'r') as f:
-        data = json.load(f)
-        assert len(data['tasks']) == 0
+    task = Task(description='Buy groceries for tonight')
+    test_session.add(task)
+    test_session.commit()
 
-
-def test_update_task(add_test_task):
-    """
-    Test case for updating a task
-    """
-    task_id = add_test_task
-    description = 'Fix shed door'
-    message = core.update_task(task_id, description)
-    assert message == f'Task {task_id} updated.'
-    with open('tasks.json', 'r') as f:
-        data = json.load(f)
-        assert data['tasks'][0]['description'] == description
-        assert data['tasks'][0]['id'] == task_id
-
-
-def test_mark_done(add_test_task):
-    """
-    Test case for marking a test as done
-    """
-    task_id = add_test_task
-    message = core.mark_done(task_id)
-    assert message == f'Task {task_id} marked as done'
-    with open('tasks.json', 'r') as f:
-        data = json.load(f)
-        assert data['tasks'][0]['id'] == task_id
-        assert data['tasks'][0]['status'] == 'done'
-    message = core.mark_done(task_id)
-    assert message == f'Task: {task_id} not found or already done'
-
-
-def test_mark_in_progress(add_test_task):
-    """
-    Test case for marking a test as in progress
-    """
-    task_id = add_test_task
-    message = core.mark_in_progress(task_id)
-    assert message == f'Task {task_id} marked as in-progress'
-    with open('tasks.json', 'r') as f:
-        data = json.load(f)
-        assert data['tasks'][0]['id'] == task_id
-        assert data['tasks'][0]['status'] == 'in-progress'
-    message = core.mark_in_progress(task_id)
-    assert message == f'Task: {task_id} not found or already in progress'
+    message = delete_task(1, db=test_session)
+    assert message == 'Task 1 deleted'
+    deleted_task = test_session.get(Task, 1)
+    assert deleted_task is None
