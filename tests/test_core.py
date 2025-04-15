@@ -1,22 +1,20 @@
 # MODULES
 import sys
 import os
+import pytest
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
-import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from task_tracker.models import Base, Task
-from task_tracker.core import (
+from task_tracker.models import Base, Task  # noqa: E402
+from task_tracker.core import (  # noqa: E402
     add_task,
     get_task,
     update_task_description,
     update_task_status,
     delete_task,
-    list_tasks,
-    get_db,
 )
 
 # SQLite DB for Testing

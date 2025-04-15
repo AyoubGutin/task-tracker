@@ -1,11 +1,16 @@
 # MODULES
+from typing import List, Optional
 from task_tracker.models import sessionLocal, Task
+from sqlalchemy.orm import Session
 
 
 # UTILITY
-def get_db():
+def get_db() -> Session:
     """
     Generator function to create a new database session
+
+    :yields db:
+        SQLAlchemy database session, a Session object
     """
     db = sessionLocal()
     try:
@@ -15,7 +20,18 @@ def get_db():
 
 
 # HELPERS
-def get_task(task_id: int, db: sessionLocal):
+def get_task(task_id: int, db: Session) -> Optional[Task]:
+    """
+    Retrieve a task by its ID
+
+    :param task_id:
+        ID of task to get
+    :param db:
+        SQLAlchemy database session
+
+    :return task:
+        Optional[Task], it is a Task object if found, else None
+    """
     task = db.get(Task, task_id)
     if task:
         return task
@@ -24,12 +40,17 @@ def get_task(task_id: int, db: sessionLocal):
 
 
 # MAIN FUNCTIONS (CRUD)
-def add_task(description: str, db: sessionLocal):
+def add_task(description: str, db: Session) -> str:
     """
     Adds a task to the database
-    :param task: The task to be added
-    :param db: database session
-    :return: Output message
+
+    :param task:
+        The task to be added
+    :param db:
+        SQLAlchemy database session
+
+    :return str:
+        Output message
     """
     db_task = Task(
         description=description
@@ -42,13 +63,19 @@ def add_task(description: str, db: sessionLocal):
     return f'Task {db_task.id} added'
 
 
-def update_task_description(task_id, description, db: sessionLocal):
+def update_task_description(task_id: int, description: str, db: Session) -> str:
     """
-    Updates a task
-    :param task_id: The id of the task to be updated
-    :param description: The new description of the task
-    :param db: Database session
-    :return: Output message
+    Updates a task description
+
+    :param task_id:
+        The id of the task to be updated
+    :param description:
+        The new description of the task
+    :param db:
+        SQLAlchemy database session
+
+    :return:
+        Output message
     """
     db_task = get_task(task_id, db)
     if db_task:
@@ -59,12 +86,17 @@ def update_task_description(task_id, description, db: sessionLocal):
         return f'Task {task_id} not found in the database'
 
 
-def delete_task(task_id: int, db: sessionLocal):
+def delete_task(task_id: int, db: Session) -> str:
     """
     Deletes a task
-    :param task_id: The id of the task to be deleted
-    :param db: Database session
-    :return: Output message
+
+    :param task_id:
+        The id of the task to be deleted
+    :param db:
+        SQLAlchemy database session
+
+    :return:
+        Output message
     """
     db_task = get_task(task_id, db)
     if db_task:
@@ -75,13 +107,19 @@ def delete_task(task_id: int, db: sessionLocal):
         return f'Task {task_id} not found in the database'
 
 
-def update_task_status(task_id: int, status: str, db: sessionLocal):
+def update_task_status(task_id: int, status: str, db: Session) -> str:
     """
     Marks a task with the status passed
-    :param task_id: The id of the task
-    :param status: The status of the task
-    :param db: Database session
-    :return: Output message
+
+    :param task_id:
+        The id of the task to be updated
+    :param status:
+        The status of the task
+    :param db:
+        SQLAlchemy database session
+
+    :return:
+        Output message
     """
     db_task = get_task(task_id, db)
     if db_task:
@@ -92,12 +130,17 @@ def update_task_status(task_id: int, status: str, db: sessionLocal):
         return f'Task {task_id} not found in the database'
 
 
-def list_tasks(db: sessionLocal, status=None):
+def list_tasks(db: Session, status: Optional[str] = None) -> List[Task]:
     """
-    Lists all the tasks
-    :param status: The status of the tasks to be listed
-    :param db: Database session
-    :return: The tasks in the database
+    Lists all the tasks, filtered by status
+
+    :param status:
+        The status of the tasks to be listed
+    :param db:
+        SQLAlchemy database session
+
+    :return:
+        The tasks in the database
     """
     query = db.query(Task)  # query targeting Task model
     if status:
