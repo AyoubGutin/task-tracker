@@ -63,7 +63,7 @@ Run the CLI from terminal using python main.py
 - [x] Basic CLI functionality
 - [x] ~~JSON~~ SQLite database
 - [x] Some unit tests 
-- [] Finish off unit tests
-- [] Improve CRUD features, like priority, due date, tags, etc
-- [] User interface
+- [ ] Finish off unit tests
+- [ ] Improve CRUD features, like priority, due date, tags, etc
+- [ ] User interface
 

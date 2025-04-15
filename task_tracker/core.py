@@ -20,7 +20,7 @@ def get_task(task_id: int, db: sessionLocal):
     if task:
         return task
     else:
-        return f'Task: {task_id} not found in the database'
+        return None
 
 
 # MAIN FUNCTIONS (CRUD)

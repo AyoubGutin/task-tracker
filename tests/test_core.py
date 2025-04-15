@@ -64,6 +64,7 @@ def test_add_task(test_session):
 
     task = test_session.query(Task).first()  # query for new task
     assert task.description == description
+    assert task.status == 'to-do'
 
 
 def test_get_task_exists(test_session):
@@ -84,7 +85,7 @@ def test_get_task_not_exists(test_session):
     Test case for retrieving a task that does not exist
     """
     message = get_task(839, db=test_session)
-    assert message == 'Task: 839 not found in the database'
+    assert message is None
 
 
 def test_delete_task(test_session):
@@ -96,6 +97,41 @@ def test_delete_task(test_session):
     test_session.commit()
 
     message = delete_task(1, db=test_session)
-    assert message == 'Task 1 deleted'
     deleted_task = test_session.get(Task, 1)
+    assert message == 'Task 1 deleted'
     assert deleted_task is None
+
+    # delete task that doesn't exist
+    message = delete_task(1, db=test_session)
+    assert message == 'Task 1 not found in the database'
+
+
+def test_update_description(test_session):
+    """
+    Test case for updating a task's description
+    """
+    task = Task(description='Test description')
+    test_session.add(task)
+    test_session.commit()
+
+    # update the task description
+    message = update_task_description(1, 'New test description', db=test_session)
+    assert message == 'Task 1 updated description'
+
+    # update the task description of one that doesn't exist
+    message = update_task_description(22929, 'New test description', db=test_session)
+    assert message == 'Task 22929 not found in the database'
+
+
+def test_update_status(test_session):
+    """
+    Test case for updating a tasks's status
+    """
+    statuses = ['in-progress', 'done', 'status']
+    task = Task(description='Test description')
+    test_session.add(task)
+    test_session.commit()
+
+    for status in statuses:
+        message = update_task_status(1, status, db=test_session)
+        assert message == 'Task 1 updated status'
