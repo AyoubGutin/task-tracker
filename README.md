@@ -1,6 +1,6 @@
 # Task Tracker - CLI
 
-Task Tracker is a simple CLI tool to help track and manage tasks. This tool can update, delete, and mark tasks as "todo", "in-progress", or "done", whilst storing them in a JSON file. 
+Task Tracker is a simple CLI tool to help track and manage tasks. This tool can update, delete, and mark tasks as "todo", "in-progress", or "done", whilst storing them in a ~~JSON~~ tasks.db file. 
 
 I am making this project, as I would like a local to-do list that is configured for my needs, and is able to run through a terminal.
 
@@ -10,12 +10,12 @@ I am making this project, as I would like a local to-do list that is configured 
 - **Delete Tasks**: Remove tasks by ID
 - **Mark Task Status**: Set tasks as "in-progress" or "done"
 - **List Tasks**: View all tasks or filter by status
-- **Persistent Storage**: Tasks are saved in a `tasks.json` file in current directory
+- **Persistent Storage**: Tasks are saved in a ~`tasks.json`~ `tasks.db` file in current directory
 
 ### Requirements:
 - Libraries used in `requirements.txt`
 - Uses positional command-line arguments for user inputs
-- Stores tasks in a JSON file, created automatically if it doesn't exist
+- Stores tasks in a ~~JSON~~ database file, created automatically if it doesn't exist
 - Handles errors gracefully
 
 ### tasks.json Properties
@@ -57,6 +57,13 @@ Run the CLI from terminal using python main.py
 2) cd to the project folder, and run the script with Python `python main,py`, then use the command examples above.
 
 
-### Future Development
-Future commits will involve making it into a web app with a database (if I have time :P). 
+### Checklist
+- [x] Set up project structure
+- [x] Implement CRUD operations for tasks (add, delete, update, list)
+- [x] Basic CLI functionality
+- [x] ~~JSON~~ SQLite database
+- [x] Some unit tests 
+- [] Finish off unit tests
+- [] Improve CRUD features, like priority, due date, tags, etc
+- [] User interface
 
