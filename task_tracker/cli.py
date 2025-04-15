@@ -1,3 +1,4 @@
+from typing import List, Optional, Callable, Any, Iterator
 from task_tracker.core import (
     add_task,
     delete_task,
@@ -14,7 +15,6 @@ from contextlib import (
 def help():
     """
     Prints the help message
-    :return: None
     """
     print('Commands:')
     print('1: add <task> - Add a task')
@@ -28,29 +28,43 @@ def help():
     print('9: exit - Exit the task tracker\n')
 
 
-@contextmanager
-def session_scope():
+# CONTEXT MANAGER FOR DATABASE SESSIONS
+@contextmanager  # generator -> context manager
+def session_scope() -> Iterator[Any]:
     """
-    Transactional scope around operations
+    Transactional scope around db operations (ACID transactions)
+    Ensures session is closed and transactions are comitted or rolled back, which is why we want a generator function
+
+    :yield db:
+        Iterator[Any]: An iterator that should havbe the database session
     """
-    db = next(get_db())  # call on get_db until it hits the yield line
+    db = None
     try:
+        db = next(
+            get_db()
+        )  # get database session, and retrieve first value yieled by generator
         yield db  # suspend execution and return value of db to caller
-        db.commit()  # commit changes
+        db.commit()  # commit changes after the with block
     except Exception:
-        db.rollback()  # undo changes
+        db.rollback()  # undo changesv if error / cancel transaction
         raise
     finally:
         db.close()  # close the conneciton
 
 
-def handle_command(command, func, status=None):
+# COMMAND HANDLNG LOGIC
+def handle_command(
+    command: List[str], func: Callable, status: Optional[str] = None
+) -> None:
     """
     Wrapper function to handle commands with task IDs
-    :param command: The command input by the user
-    :param func: The function to execute
-    :param status: Status to set if needed
-    :return: None
+
+    :param command:
+        The command list input by the user
+    :param func:
+        The function to execute
+    :param status:
+        Optional status to set if needed
     """
     try:
         task_id = int(command[1])
@@ -67,7 +81,7 @@ def handle_command(command, func, status=None):
         print('Invalid command. Please enter a valid command.')
 
 
-def main():
+def main() -> None:
     """
     Main function for CLI user interaction
     :return: None
