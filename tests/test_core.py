@@ -12,8 +12,7 @@ from task_tracker.models import Base, Task  # noqa: E402
 from task_tracker.core import (  # noqa: E402
     add_task,
     get_task,
-    update_task_title,
-    update_task_status,
+    update_task,
     delete_task,
 )
 
@@ -113,11 +112,11 @@ def test_update_title(test_session):
     test_session.commit()
 
     # update the task title
-    message = update_task_title(1, 'New test title', db=test_session)
+    message = update_task(1, title='New test title', db=test_session)
     assert message == 'Task 1 updated title'
 
     # update the task title of one that doesn't exist
-    message = update_task_title(22929, 'New test title', db=test_session)
+    message = update_task(22929, title='New test title', db=test_session)
     assert message == 'Task 22929 not found in the database'
 
 
@@ -131,5 +130,5 @@ def test_update_status(test_session):
     test_session.commit()
 
     for status in statuses:
-        message = update_task_status(1, status, db=test_session)
+        message = update_task(1, status=status, db=test_session)
         assert message == 'Task 1 updated status'

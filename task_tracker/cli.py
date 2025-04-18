@@ -1,31 +1,36 @@
-from typing import List, Optional, Callable, Any, Iterator
+from typing import List, Any, Iterator
 from task_tracker.core import (
     add_task,
     delete_task,
-    update_task_title,
-    update_task_status,
+    update_task,
     list_tasks,
     get_db,
 )
+from task_tracker.models import Task
 from contextlib import (
     contextmanager,
 )  # manages resources like a database session using a with statement, that allows commits, rollbacks, and closed sessions without manual management
+import datetime as dt
+import shlex
 
 
 def help():
     """
-    Prints the help message
+    Prints the help message listing all available commands and their usage.
     """
     print('Commands:')
-    print('1: add <task> - Add a task')
-    print('2: update <task_id> <task> - Update a task')
-    print('3: delete <task_id> - Delete a task')
-    print('4: mark-in-progress <task_id> - Mark a task as in progress')
-    print('5: mark-done <task_id> - Mark a task as done')
-    print('6: mark-todo <task_id> - Mark a task as to-do')
-    print('7: list - List all tasks')
-    print('8: list <status> - List all tasks with the given status')
-    print('9: exit - Exit the task tracker\n')
+    print(
+        '  add <title> [--description <description>] [--due-date <YYYY-MM-DD>] - Add a task'
+    )
+    print(
+        '  update <task_id> [--title <title>] [--description <description>] [--status <status>] [--due-date <YYYY-MM-DD>] - Update a task'
+    )
+    print('  delete <task_id> - Delete a task')
+    print('  mark-in-progress <task_id> - Mark a task as in progress')
+    print('  mark-done <task_id> - Mark a task as done')
+    print('  mark-todo <task_id> - Mark a task as to-do')
+    print('  list [status] - List all tasks or tasks with the given status')
+    print('  exit - Exit the task tracker\n')
 
 
 # CONTEXT MANAGER FOR DATABASE SESSIONS
@@ -40,45 +45,154 @@ def session_scope() -> Iterator[Any]:
     """
     db = None
     try:
-        db = next(
-            get_db()
-        )  # get database session, and retrieve first value yieled by generator
-        yield db  # suspend execution and return value of db to caller
-        db.commit()  # commit changes after the with block
+        # get first database session, yield to caller, and commit
+        db = next(get_db())
+        yield db
+        db.commit()
     except Exception:
-        db.rollback()  # undo changesv if error / cancel transaction
+        db.rollback()  # undo changes if error / cancel transaction
         raise
     finally:
         db.close()  # close the conneciton
 
 
-# COMMAND HANDLNG LOGIC
-def handle_command(
-    command: List[str], func: Callable, status: Optional[str] = None
-) -> None:
+# HELPER FUNCTIONS
+def display_task(task: Task) -> None:
     """
-    Wrapper function to handle commands with task IDs
+    Display details of a single task formatted
+
+    :param task:
+        Task object to be displayed
+    """
+    print(f'ID {task.id}')
+    print(f'Title: {task.title}')
+    if task.description:
+        print(f'Description: {task.description}')
+    if task.dueDate:
+        print(f'Due Date: {task.dueDate}')
+    print(f'Status: {task.status}')
+    print(f'Created At: {task.createdAt}')
+    print(f'Updated At: {task.updatedAt}')
+
+
+# COMMAND HANDLNG LOGIC
+def handle_add_command(args: List[str]) -> None:
+    """
+    Wrapper function to handle add commands, includes title, optional: {description, dueDate}
 
     :param command:
         The command list input by the user
-    :param func:
-        The function to execute
-    :param status:
-        Optional status to set if needed
     """
+
+    if not args:
+        print('Error: No title')
+        return
+
+    # -- REQUIRED FIELD: TITLE --
+    # collect title keywords until a flag is reached
+    title_parts = []
+    i = 0
+    # while counter is less than length of the argument, and word doesn't start with '--', append to title parts
+    while i < len(args) and not args[i].startswith('--'):
+        title_parts.append(args[i])
+        i += 1
+    title = ' '.join(title_parts)
+    if not title:
+        print('Error: add command cannot take a blank title')
+
+    # -- CHECK FOR OPTIONAL FIELDS: DESCRIPTION, DUE DATE --
+    description = None
+    dueDate = None
+    # parse remaining arguments for flags
+    while i < len(args):
+        if args[i] == '--description' and i + 1 < len(args):
+            desc_parts = []
+            i += 1
+            # collect all parts after --description until another flag or end
+            while i < len(args) and not args[i].startswith('--'):
+                desc_parts.append(args[i])
+                i += 1
+            description = ' '.join(desc_parts)
+        elif args[i] == '--due-date' and i + 1 < len(args):
+            try:
+                # parse due date in YYYY-MM-DD
+                dueDate = dt.datetime.strptime(args[i + 1], '%Y-%m-%d')
+                i += 2
+            except ValueError:
+                print('Error: Due date must be in YYYY-MM-DD format')
+                return
+        else:
+            print(
+                'Invalid arguments. Use add <title> [--description <description>] [--due-date <YYYY-MM-DD]'
+            )
+            return
+
+    with session_scope() as db:
+        print(add_task(title, description, dueDate, db=db))
+
+
+def handle_update_command(args: List[str]) -> None:
+    """
+    Wrapper function to handle remove commands
+
+    :param command:
+        The command list input by user
+    """
+    if args is None:
+        print('Error: update requires a task id')
+
     try:
-        task_id = int(command[1])
-        with session_scope() as db:
-            if status:
-                print(func(task_id, status, db=db))
-            elif len(command[2:]) == 0:
-                print(func(task_id, db=db))
-            else:  # if there is a title, join it to a string
-                print(func(task_id, ''.join(*command[2:]), db=db))
+        # extract task id from second argument
+        task_id = int(args[0])
+        title = None
+        description = None
+        dueDate = None
+        status = None
+        # parse remaining arguments
+        args = args[1:] if len(args) > 1 else []
+
+        i = 0
+        while i < len(args):
+            # parse remaining arguments for flags
+            while i < len(args):
+                if args[i] == '--title' and i + 1 < len(args):
+                    title_parts = []
+                    i += 1
+                    while i < len(args) and not args[i].startswith('--'):
+                        title_parts.append(args[i])
+                        i += 1
+                    title = ' '.join(title_parts)
+                elif args[i] == '--description' and i + 1 < len(args):
+                    desc_parts = []
+                    i += 1
+                    while i < len(args) and not args[i].startswith('--'):
+                        desc_parts.append(args[i])
+                        i += 1
+                    description = ' '.join(desc_parts)
+                elif args[i] == '--status' and i + 1 < len(args):
+                    status = args[i + 1]
+                    i += 2
+                elif args[i] == '--due-date' and i + 1 < len(args):
+                    try:
+                        # parse due date and convert it to date time objet, YYYY-MM-DD
+                        dueDate = dt.datetime.strptime(args[i + 1], '%Y-%m-%d')
+                        i += 2
+                    except ValueError:
+                        print('Error: Due date must be in YYYY-MM-DD')
+                        return
+                else:
+                    print(
+                        'Invalid arguments. Use update <task_id> [--title <title>] [--description <description>] [--status <status>] [--due-date <YYYY-MM-DD>]'
+                    )
+                    return
+
+            if not any([title, description, status, dueDate]):
+                print('Error: At least one field must be provided')
+                return
+            with session_scope() as db:
+                print(update_task(task_id, title, description, status, dueDate, db=db))
     except ValueError:
-        print('Invalid task ID. Please enter a number.')
-    except TypeError:
-        print('Invalid command. Please enter a valid command.')
+        print('Invalid task ID. Enter a number')
 
 
 def main() -> None:
@@ -86,71 +200,71 @@ def main() -> None:
     Main function for CLI user interaction
     :return: None
     """
-    help()  # print the help message
+    # help message on startup
+    help()
 
     while True:
-        # get the command from the user
-        command = input('Enter command: ').strip().split(' ', 2)
+        # get user input and remove whitespace
+        raw_command = input('Enter command: ').strip()
+        if not raw_command:
+            continue
 
-        if command[0] == 'help':  # if the user enters help, print the help message
+        try:
+            # parse command with shlex to preserve quotes and flags
+            args = shlex.split(raw_command)
+        except ValueError:
+            print('Error: Invalid command syntax (e.g., unmatched quotes).')
+            continue
+
+        if not args:
+            continue
+
+        # get the command verb, like add or update
+        command_verb = args[0]
+
+        if command_verb == 'help':
             help()
-
-        elif (
-            command[0] == 'add' and len(command) > 1
-        ):  # if the user enters add, add the task
-            title = ''.join(command[1:])
-            with (
-                session_scope() as db
-            ):  # return the session, execute add task function, then close sesison.
-                print(add_task(title, db=db))
-        elif (
-            command[0] == 'update' and len(command) > 2
-        ):  # if the user enters update, update the task
-            handle_command(command, update_task_title)
-        elif (
-            command[0] == 'delete' and len(command) > 1
-        ):  # if the user enters delete, delete the task
-            handle_command(command, delete_task)
-
-        elif (
-            command[0] == 'mark-in-progress' and len(command) > 1
-        ):  # if the user enters mark-in-progress, mark the task as in progress
+        elif command_verb == 'add':
+            handle_add_command(args[1:])
+        elif command_verb == 'update':
+            handle_update_command(args[1:])
+        elif command_verb == 'delete':
+            if len(args) != 2:
+                print('Error: delete command requires one task ID.')
+                continue
             try:
-                task_id = int(command[1])
+                task_id = int(args[1])
                 with session_scope() as db:
-                    print(update_task_status(task_id, 'in-progress', db=db))
+                    print(delete_task(task_id, db=db))
             except ValueError:
-                print('Invalid task ID. Please enter a number')
-        elif (
-            command[0] == 'mark-done' and len(command) > 1
-        ):  # if the user enters mark-done, mark the task as done
+                print('Invalid task ID. Enter a number')
+        elif command_verb in ('mark-in-progress', 'mark-done', 'mark-todo'):
+            if len(args) < 2:
+                print(f'Error: {command_verb} command requires a task ID.')
+                continue
             try:
-                task_id = int(command[1])
+                task_id = int(args[1])
+                status = {
+                    'mark-in-progress': 'in-progress',
+                    'mark-done': 'done',
+                    'mark-todo': 'to-do',
+                }[command_verb]
                 with session_scope() as db:
-                    print(update_task_status(task_id, 'done', db=db))
+                    print(update_task(task_id, status=status, db=db))
             except ValueError:
-                print('Invalid task ID. Please enter a number')
-        elif (
-            command[0] == 'mark-todo' and len(command) > 1
-        ):  # if the user enters mark-todo, mark the task as to-do
-            try:
-                task_id = int(command[1])
-                with session_scope() as db:
-                    print(update_task_status(task_id, 'to-do', db=db))
-            except ValueError:
-                print('Invalid task ID. Please enter a number')
-
-        elif command[0] == 'list':  # if the user enters list, list the tasks
+                print('Invalid task ID. Enter a number')
+        elif command_verb == 'list':
             with session_scope() as db:
-                if (
-                    len(command) > 1
-                ):  # if the user enters list with a status, list the tasks with that status
-                    print(list_tasks(db=db, status=command[1]))
-                else:  # if the user enters list without a status, list all tasks
-                    print(list_tasks(db=db))
-        elif command[0] == 'exit':  # if the user enters exit, exit the program
+                status = args[1] if len(args) == 2 else None
+                tasks = list_tasks(db=db, status=status)
+                if tasks:
+                    for task in tasks:
+                        display_task(task)
+                        print('---')
+                else:
+                    print('No tasks found.')
+        elif command_verb == 'exit':
             print('Exiting Task Tracker. Goodbye!')
             break
-
         else:
             print('Invalid command. Type "help" for a list of commands.')
