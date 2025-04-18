@@ -36,9 +36,11 @@ class Task(Base):
     title = Column(
         String, nullable=False
     )  # field, title, which is a string and required
+    description = Column(String, nullable=True)  # field, description, which is a string
     status = Column(
         String, default='to-do'
     )  # field, status, which is a string and default as 'to-do'
+    dueDate = Column(DateTime, nullable=True)
     createdAt = Column(
         DateTime, default=dt.datetime.now
     )  # field, createdAt, which is a DateTime object and default as current time
@@ -50,7 +52,7 @@ class Task(Base):
         """
         Defines how an instance of the Task class should be represented as a string, for logging
         """
-        return f'<Task(id={self.id}, title={self.title}, status={self.status}, createdAt={self.createdAt}, updatedAt={self.updatedAt})>'
+        return f'<Task(id={self.id}, title={self.title}, description={self.description}, status={self.status}, dueDate={self.dueDate}, createdAt={self.createdAt}, updatedAt={self.updatedAt})>'
 
 
 def init_db():

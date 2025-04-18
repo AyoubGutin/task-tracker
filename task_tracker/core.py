@@ -2,6 +2,7 @@
 from typing import List, Optional
 from task_tracker.models import sessionLocal, Task
 from sqlalchemy.orm import Session
+import datetime as dt
 
 
 # UTILITY
@@ -40,19 +41,32 @@ def get_task(task_id: int, db: Session) -> Optional[Task]:
 
 
 # MAIN FUNCTIONS (CRUD)
-def add_task(title: str, db: Session) -> str:
+def add_task(
+    title: str,
+    description: Optional[str] = None,
+    dueDate: Optional[dt.datetime] = None,
+    db: Session = None,
+) -> str:
     """
     Adds a task to the database
 
-    :param task:
-        The task to be added
+    :param title:
+        The title of task to be added
+    :param description:
+        The description of task to be added (optional)
+    : param dueDate:
+        The due date of the task to be added (optional)
     :param db:
         SQLAlchemy database session
 
     :return str:
         Output message
     """
-    db_task = Task(title=title)  # new instance of the Task model, passing the title
+    db_task = Task(
+        title=title,
+        description=description,
+        dueDate=dueDate,
+    )  # new instance of the Task model, passing the title
     db.add(
         db_task
     )  #  add new task object to the database session, which then inserts it into the table using db.commit
@@ -61,14 +75,27 @@ def add_task(title: str, db: Session) -> str:
     return f'Task {db_task.id} added'
 
 
-def update_task_title(task_id: int, title: str, db: Session) -> str:
+def update_task(
+    task_id: int,
+    title: Optional[str] = None,
+    description: Optional[str] = None,
+    status: Optional[str] = None,
+    dueDate: Optional[dt.datetime] = None,
+    db: Session = None,
+) -> str:
     """
-    Updates a task title
+    Updates a task, and records the changes
 
     :param task_id:
         The id of the task to be updated
     :param title:
-        The new title of the task
+        The new title of the task (optional)
+    :param description:
+        The new description of the task (optional)
+    :param status:
+        The new status of the task (optional)
+    :param dueDate:
+        The new due date of the task
     :param db:
         SQLAlchemy database session
 
@@ -76,10 +103,24 @@ def update_task_title(task_id: int, title: str, db: Session) -> str:
         Output message
     """
     db_task = get_task(task_id, db)
+    changes = {}
+
     if db_task:
-        db_task.title = title
+        if title is not None:
+            changes[db_task.title] = title
+            db_task.title = title
+        if description is not None:
+            changes[db_task.description] = description
+            db_task.description = description
+        if status is not None:
+            changes[db_task.status] = status
+            db_task.status = status
+        if dueDate is not None:
+            changes[db_task.dueDate] = dueDate
+            db_task.dueDate = dueDate
         db.commit()
-        return f'Task {task_id} updated title'
+        return f'Task {task_id} updated\n\
+            {changes}'
     else:
         return f'Task {task_id} not found in the database'
 
@@ -101,29 +142,6 @@ def delete_task(task_id: int, db: Session) -> str:
         db.delete(db_task)
         db.commit()
         return f'Task {task_id} deleted'
-    else:
-        return f'Task {task_id} not found in the database'
-
-
-def update_task_status(task_id: int, status: str, db: Session) -> str:
-    """
-    Marks a task with the status passed
-
-    :param task_id:
-        The id of the task to be updated
-    :param status:
-        The status of the task
-    :param db:
-        SQLAlchemy database session
-
-    :return:
-        Output message
-    """
-    db_task = get_task(task_id, db)
-    if db_task:
-        db_task.status = status
-        db.commit()
-        return f'Task {task_id} updated status'
     else:
         return f'Task {task_id} not found in the database'
 
