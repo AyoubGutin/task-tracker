@@ -12,7 +12,7 @@ from task_tracker.models import Base, Task  # noqa: E402
 from task_tracker.core import (  # noqa: E402
     add_task,
     get_task,
-    update_task_description,
+    update_task_title,
     update_task_status,
     delete_task,
 )
@@ -56,12 +56,12 @@ def test_add_task(test_session):
     """
     Test case for adding a task
     """
-    description = 'Buy groceries for tonight'
-    message = add_task(description, db=test_session)
+    title = 'Buy groceries for tonight'
+    message = add_task(title, db=test_session)
     assert message == 'Task 1 added'
 
     task = test_session.query(Task).first()  # query for new task
-    assert task.description == description
+    assert task.title == title
     assert task.status == 'to-do'
 
 
@@ -69,13 +69,13 @@ def test_get_task_exists(test_session):
     """
     Test case for retrieving an existing task
     """
-    task = Task(description='Existing Task')
+    task = Task(title='Existing Task')
     test_session.add(task)
     test_session.commit()
 
     retrieved_task = get_task(1, db=test_session)
     assert retrieved_task is not None
-    assert retrieved_task.description == 'Existing Task'
+    assert retrieved_task.title == 'Existing Task'
 
 
 def test_get_task_not_exists(test_session):
@@ -90,7 +90,7 @@ def test_delete_task(test_session):
     """
     Test case for removing a task
     """
-    task = Task(description='Buy groceries for tonight')
+    task = Task(title='Buy groceries for tonight')
     test_session.add(task)
     test_session.commit()
 
@@ -104,20 +104,20 @@ def test_delete_task(test_session):
     assert message == 'Task 1 not found in the database'
 
 
-def test_update_description(test_session):
+def test_update_title(test_session):
     """
-    Test case for updating a task's description
+    Test case for updating a task's title
     """
-    task = Task(description='Test description')
+    task = Task(title='Test title')
     test_session.add(task)
     test_session.commit()
 
-    # update the task description
-    message = update_task_description(1, 'New test description', db=test_session)
-    assert message == 'Task 1 updated description'
+    # update the task title
+    message = update_task_title(1, 'New test title', db=test_session)
+    assert message == 'Task 1 updated title'
 
-    # update the task description of one that doesn't exist
-    message = update_task_description(22929, 'New test description', db=test_session)
+    # update the task title of one that doesn't exist
+    message = update_task_title(22929, 'New test title', db=test_session)
     assert message == 'Task 22929 not found in the database'
 
 
@@ -126,7 +126,7 @@ def test_update_status(test_session):
     Test case for updating a tasks's status
     """
     statuses = ['in-progress', 'done', 'status']
-    task = Task(description='Test description')
+    task = Task(title='Test title')
     test_session.add(task)
     test_session.commit()
 

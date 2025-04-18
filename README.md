@@ -5,8 +5,8 @@ Task Tracker is a simple CLI tool to help track and manage tasks. This tool can 
 I am making this project, as I would like a local to-do list that is configured for my needs, and is able to run through a terminal.
 
 ### MVP Features:
-- **Add**: Create new tasks with a unique ID and description
-- **Update Tasks**: Modify task description
+- **Add**: Create new tasks with a unique ID and title
+- **Update Tasks**: Modify task title
 - **Delete Tasks**: Remove tasks by ID
 - **Mark Task Status**: Set tasks as "in-progress" or "done"
 - **List Tasks**: View all tasks or filter by status
@@ -20,7 +20,7 @@ I am making this project, as I would like a local to-do list that is configured 
 
 ### tasks.json Properties
 - `id`: Unique identfier for each task - integer
-- `description`: Short task description - string
+- `title`: Short task title - string
 - `status`: Current status (`todo`, `in-progress`, or `done`)
 - createdAt: Creatio timestamp - datetime object
 - updatedAt: Last update timestamp - datetime object
@@ -29,11 +29,11 @@ I am making this project, as I would like a local to-do list that is configured 
 Run the CLI from terminal using python main.py
 `Enter command:`  **insert command and arguments**
 
-#### Command	Description	Example
+#### Command	title	Example
 ---
-###### `add <description>` Add a new task `python main.py add "Buy groceries"`
+###### `add <title>` Add a new task `python main.py add "Buy groceries"`
 ---
-###### `update  <description>`	Update a task’s description	`python main.py update 1 "Buy groceries and cook"`
+###### `update  <title>`	Update a task’s title	`python main.py update 1 "Buy groceries and cook"`
 ---
 ###### `delete <id>` Delete a task by ID `python main.py delete 1`
 ---

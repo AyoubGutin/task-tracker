@@ -11,7 +11,16 @@ from sqlalchemy.orm import (
 )  # object-relational mapper (ORM) - bridge between OOP amd relational dbs
 import datetime as dt
 
+
 Base = declarative_base()  # any class that inheirts from Base is considered a SQLAlchemy ORM model - parent class
+
+engine = create_engine(
+    'sqlite:///./tasks.db', echo=True
+)  # connect to the database, and enable logging of all the statements
+
+sessionLocal = sessionmaker(
+    autocommit=False, autoflush=False, bind=engine
+)  # factory for database sessions (managing connections) -> ensure transactions are not automatically comitted
 
 
 class Task(Base):
@@ -24,9 +33,9 @@ class Task(Base):
 
     id = Column(Integer, primary_key=True)  # primary key field, id, which is an integer
 
-    description = Column(
+    title = Column(
         String, nullable=False
-    )  # field, description, which is a string and required
+    )  # field, title, which is a string and required
     status = Column(
         String, default='to-do'
     )  # field, status, which is a string and default as 'to-do'
@@ -41,16 +50,7 @@ class Task(Base):
         """
         Defines how an instance of the Task class should be represented as a string, for logging
         """
-        return f'<Task(id={self.id}, description={self.description}, status={self.status}, createdAt={self.createdAt}, updatedAt={self.updatedAt})>'
-
-
-engine = create_engine(
-    'sqlite:///./tasks.db', echo=True
-)  # connect to the database, and enable logging of all the statements
-
-sessionLocal = sessionmaker(
-    autocommit=False, autoflush=False, bind=engine
-)  # factory for database sessions (managing connections) -> ensure transactions are not automatically comitted
+        return f'<Task(id={self.id}, title={self.title}, status={self.status}, createdAt={self.createdAt}, updatedAt={self.updatedAt})>'
 
 
 def init_db():

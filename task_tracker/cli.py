@@ -2,7 +2,7 @@ from typing import List, Optional, Callable, Any, Iterator
 from task_tracker.core import (
     add_task,
     delete_task,
-    update_task_description,
+    update_task_title,
     update_task_status,
     list_tasks,
     get_db,
@@ -73,7 +73,7 @@ def handle_command(
                 print(func(task_id, status, db=db))
             elif len(command[2:]) == 0:
                 print(func(task_id, db=db))
-            else:  # if there is a description, join it to a string
+            else:  # if there is a title, join it to a string
                 print(func(task_id, ''.join(*command[2:]), db=db))
     except ValueError:
         print('Invalid task ID. Please enter a number.')
@@ -98,15 +98,15 @@ def main() -> None:
         elif (
             command[0] == 'add' and len(command) > 1
         ):  # if the user enters add, add the task
-            description = ''.join(command[1:])
+            title = ''.join(command[1:])
             with (
                 session_scope() as db
             ):  # return the session, execute add task function, then close sesison.
-                print(add_task(description, db=db))
+                print(add_task(title, db=db))
         elif (
             command[0] == 'update' and len(command) > 2
         ):  # if the user enters update, update the task
-            handle_command(command, update_task_description)
+            handle_command(command, update_task_title)
         elif (
             command[0] == 'delete' and len(command) > 1
         ):  # if the user enters delete, delete the task

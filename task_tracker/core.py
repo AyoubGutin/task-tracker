@@ -40,7 +40,7 @@ def get_task(task_id: int, db: Session) -> Optional[Task]:
 
 
 # MAIN FUNCTIONS (CRUD)
-def add_task(description: str, db: Session) -> str:
+def add_task(title: str, db: Session) -> str:
     """
     Adds a task to the database
 
@@ -52,9 +52,7 @@ def add_task(description: str, db: Session) -> str:
     :return str:
         Output message
     """
-    db_task = Task(
-        description=description
-    )  # new instance of the Task model, passing the description
+    db_task = Task(title=title)  # new instance of the Task model, passing the title
     db.add(
         db_task
     )  #  add new task object to the database session, which then inserts it into the table using db.commit
@@ -63,14 +61,14 @@ def add_task(description: str, db: Session) -> str:
     return f'Task {db_task.id} added'
 
 
-def update_task_description(task_id: int, description: str, db: Session) -> str:
+def update_task_title(task_id: int, title: str, db: Session) -> str:
     """
-    Updates a task description
+    Updates a task title
 
     :param task_id:
         The id of the task to be updated
-    :param description:
-        The new description of the task
+    :param title:
+        The new title of the task
     :param db:
         SQLAlchemy database session
 
@@ -79,9 +77,9 @@ def update_task_description(task_id: int, description: str, db: Session) -> str:
     """
     db_task = get_task(task_id, db)
     if db_task:
-        db_task.description = description
+        db_task.title = title
         db.commit()
-        return f'Task {task_id} updated description'
+        return f'Task {task_id} updated title'
     else:
         return f'Task {task_id} not found in the database'
 
