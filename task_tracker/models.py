@@ -2,14 +2,18 @@ from sqlalchemy import (
     create_engine,
     Column,
     Integer,
-    String,
-    DateTime,
+    Table,
+    ForeignKey,
 )  # modules for db operations
-from sqlalchemy.orm import declarative_base
 from sqlalchemy.orm import (
+    declarative_base,
     sessionmaker,
+    relationship,
+    Mapped,
+    mapped_column,
 )  # object-relational mapper (ORM) - bridge between OOP amd relational dbs
 import datetime as dt
+from typing import List, Optional
 
 
 Base = declarative_base()  # any class that inheirts from Base is considered a SQLAlchemy ORM model - parent class
@@ -31,28 +35,61 @@ class Task(Base):
 
     __tablename__ = 'tasks'  # table name
 
-    id = Column(Integer, primary_key=True)  # primary key field, id, which is an integer
+    id: Mapped[int] = mapped_column(primary_key=True)
 
-    title = Column(
-        String, nullable=False
+    title: Mapped[str] = mapped_column(
+        nullable=False
     )  # field, title, which is a string and required
-    description = Column(String, nullable=True)  # field, description, which is a string
-    status = Column(
-        String, default='to-do'
+    description: Mapped[Optional[str]] = mapped_column(
+        nullable=True
+    )  # field, description, which is a string
+    status: Mapped[Optional[str]] = mapped_column(
+        default='to-do'
     )  # field, status, which is a string and default as 'to-do'
-    dueDate = Column(DateTime, nullable=True)
-    createdAt = Column(
-        DateTime, default=dt.datetime.now
+    dueDate: Mapped[Optional[dt.datetime]] = mapped_column(
+        nullable=True
+    )  # field, dueDate, which is a datetime object
+    createdAt: Mapped[dt.datetime] = mapped_column(
+        default=dt.datetime.now
     )  # field, createdAt, which is a DateTime object and default as current time
-    updatedAt = Column(
-        DateTime, default=dt.datetime.now, onupdate=dt.datetime.now
+    updatedAt: Mapped[dt.datetime] = mapped_column(
+        default=dt.datetime.now, onupdate=dt.datetime.now
     )  # field, updatedAt, which is a DateTime object and defaults and updates as current time
+
+    tags: Mapped[List['Tag']] = relationship(
+        'Tag', secondary='task_tags', back_populates='tasks'
+    )
 
     def __repr__(self):
         """
         Defines how an instance of the Task class should be represented as a string, for logging
         """
         return f'<Task(id={self.id}, title={self.title}, description={self.description}, status={self.status}, dueDate={self.dueDate}, createdAt={self.createdAt}, updatedAt={self.updatedAt})>'
+
+
+class Tag(Base):
+    """
+    Define the Tag table as a child of the Base class - It is an ORM Model
+    Class maps to the 'tags' table in the database
+    """
+
+    __tablename__ = 'tags'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    name: Mapped[str] = mapped_column(unique=True, nullable=False)
+
+    tasks: Mapped[List['Task']] = relationship(
+        'Task', secondary='task_tags', back_populates='tags'
+    )
+
+
+task_tags = Table(
+    'task_tags',
+    Base.metadata,
+    Column('task_id', Integer, ForeignKey('tasks.id'), primary_key=True),
+    Column('tag_id', Integer, ForeignKey('tags.id'), primary_key=True),
+)
 
 
 def init_db():

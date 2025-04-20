@@ -1,6 +1,6 @@
 # MODULES
 from typing import List, Optional
-from task_tracker.models import sessionLocal, Task
+from task_tracker.models import sessionLocal, Task, Tag
 from sqlalchemy.orm import Session
 import datetime as dt
 
@@ -45,6 +45,7 @@ def add_task(
     title: str,
     description: Optional[str] = None,
     dueDate: Optional[dt.datetime] = None,
+    tags: Optional[List[str]] = None,
     db: Session = None,
 ) -> str:
     """
@@ -54,8 +55,10 @@ def add_task(
         The title of task to be added
     :param description:
         The description of task to be added (optional)
-    : param dueDate:
+    :param dueDate:
         The due date of the task to be added (optional)
+    :param tags:
+        The tags of the task to be added (optional)
     :param db:
         SQLAlchemy database session
 
@@ -72,6 +75,21 @@ def add_task(
     )  #  add new task object to the database session, which then inserts it into the table using db.commit
     db.commit()
     db.refresh(db_task)
+
+    if tags:
+        for tag_name in tags:
+            try:
+                tag = db.query(Tag).filter(Tag.name == tag_name).first()
+                if not tag:
+                    tag = Tag(name=tag_name)
+                    db.add(tag)
+                    db.commit()
+                if tag not in db_task.tags:
+                    db_task.tags.append(tag)
+                    db.commit()
+            except Exception as e:
+                print(f'Failed to process tag {tag.name}: {e}')
+
     return f'Task {db_task.id} added'
 
 

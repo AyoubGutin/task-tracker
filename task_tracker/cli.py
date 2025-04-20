@@ -106,6 +106,7 @@ def display_task(task: Task) -> None:
     if task.dueDate:
         print(f'Due Date: {task.dueDate}')
     print(f'Status: {task.status}')
+    print(f'Tags: {", ".join(tag.name for tag in task.tags)}')
     print(f'Created At: {task.createdAt}')
     print(f'Updated At: {task.updatedAt}')
 
@@ -119,7 +120,14 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
     :param allowed_flags:
         Set of valid flags
     """
-    result = {'title': None, 'description': None, 'due-date': None, 'status': None}
+    result = {
+        'title': None,
+        'description': None,
+        'due-date': None,
+        'status': None,
+        'tags': None,
+        'delete-tags': None,
+    }
     i = 0
     title_parts = []
 
@@ -134,7 +142,7 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
     while i < len(args):
         flag = args[i][2:] if args[i].startswith('--') else args[i]
         if flag not in allowed_flags:
-            print('Invalid flag')
+            print('Invalid flag!')
             return {}
         if i + 1 >= len(args):
             print('Error: Flag requires a value')
@@ -147,6 +155,15 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
                 parts.append(args[i])
                 i += 1
             result[flag] = ' '.join(parts)
+        elif flag in ('tags', 'delete-tags'):
+            tag_input = args[i + 1]
+            if not isinstance(tag_input, str):
+                print('Error. Tags must be comma seperated')
+                return {}
+            tag_input = tag_input.replace(' ', '')
+            tags = tag_input.split(',')
+            result[flag] = tags
+            i += 2
         elif flag == 'due-date':
             try:
                 result[flag] = dt.datetime.strptime(args[i + 1], '%Y-%m-%d')
@@ -172,19 +189,20 @@ def handle_add_command(args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-    flags = parse_flags(args, {'title', 'description', 'due-date'})
+    flags = parse_flags(args, {'title', 'description', 'due-date', 'tags'})
     if not flags:
         return
 
     title = flags.get('title')
     if not title:
-        print('ErrorL add requires a title')
+        print('Error: add requires a title')
 
     print(
         add_task(
             title=title,
             description=flags.get('description'),
             dueDate=flags.get('due-date'),
+            tags=flags.get('tags'),
             db=db,
         )
     )
@@ -203,7 +221,9 @@ def handle_update_command(task_id: int, args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-    flags = parse_flags(args, {'title', 'description', 'status', 'due-date'})
+    flags = parse_flags(
+        args, {'title', 'description', 'status', 'due-date', 'tags', 'delete-tags'}
+    )
     if not flags:
         return
     if not any(flags.values()):
@@ -276,7 +296,7 @@ def handle_list_command(args: List[str], db: Session) -> None:
 
 # COMMAND REGISTER
 COMMANDS = {
-    'help': help(),
+    'help': help,
     'add': handle_add_command,
     'update': handle_update_command,
     'delete': handle_delete_command,
