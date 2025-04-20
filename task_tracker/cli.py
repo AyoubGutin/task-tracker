@@ -4,7 +4,7 @@ from task_tracker.core import (
     delete_task,
     update_task,
     list_tasks,
-    get_db,
+    get_db,  # generator function to get db session
 )
 from task_tracker.models import Task
 from contextlib import (
@@ -13,7 +13,7 @@ from contextlib import (
 import datetime as dt
 import shlex  # lexical analysis for parsing command line inputs by tokenising inputs (splits based on space, unless its a quote)
 from sqlalchemy.orm import Session
-from functools import wraps
+from functools import wraps  # wraps decorator for preserving function metadata
 
 
 def help():
@@ -47,7 +47,7 @@ def session_scope() -> Iterator[Session]:
     """
     db = None
     try:
-        # get first database session, yield to caller, and commit
+        # get first database session, yield to caller, and commit once session is ended
         db = next(get_db())
         yield db
         db.commit()
@@ -66,8 +66,12 @@ def with_db_session(func: Callable) -> Callable:
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        with session_scope() as db:
-            return func(*args, db=db, **kwargs)
+        with (
+            session_scope() as db
+        ):  # use session_scope context manager to get db session
+            return func(
+                *args, db=db, **kwargs
+            )  # call decorated function w/ database session and args
 
     return wrapper
 
@@ -79,12 +83,14 @@ def with_task_id(func: Callable) -> Callable:
 
     @wraps(func)
     def wrapper(args: List[str], *f_args, **kwargs):
-        if not args:
+        if not args:  # check if arguments are provided.
             print('Error: Requires a task ID')
             return
         try:
-            task_id = int(args[0])
-            return func(task_id, args[1:], *f_args, **kwargs)
+            task_id = int(args[0])  # convert first arg to a integer
+            return func(
+                task_id, args[1:], *f_args, **kwargs
+            )  # call decorated function w/ database session and args
         except ValueError:
             print('Invalid task ID. Enter a number')
 
@@ -119,11 +125,16 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
     :param allowed_flags:
         Set of valid flags
     """
-    result = {'title': None, 'description': None, 'due-date': None, 'status': None}
-    i = 0
-    title_parts = []
+    result = {
+        'title': None,
+        'description': None,
+        'due-date': None,
+        'status': None,
+    }  # dict to store parsed flag values
+    i = 0  # represents the index of input by user
+    title_parts = []  # collect parts of the title - for add command
 
-    # collect title - for add command - until a flag is reached
+    # collect title - for add command - until a flag is reached - as you dont need to specify the title i nthe add command
     while i < len(args) and not args[i].startswith('--'):
         title_parts.append(args[i])
         i += 1
@@ -132,15 +143,20 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
 
     # parse flags
     while i < len(args):
-        flag = args[i][2:] if args[i].startswith('--') else args[i]
-        if flag not in allowed_flags:
+        flag = (
+            args[i][2:] if args[i].startswith('--') else args[i]
+        )  # extract flag name and remove the '--'
+        if flag not in allowed_flags:  # if flag is invalid
             print('Invalid flag')
             return {}
         if i + 1 >= len(args):
-            print('Error: Flag requires a value')
+            print('Error: Flag requires a value')  # if flag has no value, print error
             return {}
 
-        if flag in ('title', 'description'):
+        if flag in (
+            'title',
+            'description',
+        ):  # if flag is description or title, get the parts
             parts = []
             i += 1
             while i < len(args) and not args[i].startswith('--'):
@@ -149,7 +165,9 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
             result[flag] = ' '.join(parts)
         elif flag == 'due-date':
             try:
-                result[flag] = dt.datetime.strptime(args[i + 1], '%Y-%m-%d')
+                result[flag] = dt.datetime.strptime(
+                    args[i + 1], '%Y-%m-%d'
+                )  # parse the string into a datetime object, if in right format
                 i += 2
             except ValueError:
                 print('Error: Due date must be in YYYY-MM-DD format')
@@ -172,11 +190,13 @@ def handle_add_command(args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-    flags = parse_flags(args, {'title', 'description', 'due-date'})
-    if not flags:
+    flags = parse_flags(
+        args, {'title', 'description', 'due-date'}
+    )  # call parse function w/ args and allowed function
+    if not flags:  # if no flags return
         return
 
-    title = flags.get('title')
+    title = flags.get('title')  # make sure a title is present
     if not title:
         print('ErrorL add requires a title')
 
@@ -203,8 +223,10 @@ def handle_update_command(task_id: int, args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-    flags = parse_flags(args, {'title', 'description', 'status', 'due-date'})
-    if not flags:
+    flags = parse_flags(
+        args, {'title', 'description', 'status', 'due-date'}
+    )  # call parse function w/ args and allowed flags
+    if not flags:  # if no flags return
         return
     if not any(flags.values()):
         print('Error: At least one field required for an update')
@@ -263,6 +285,10 @@ def handle_mark_status_command(task_id: int, args: List[str], status: str, db: S
 def handle_list_command(args: List[str], db: Session) -> None:
     """
     Function to handle list command w/ optional status filter
+    param args:
+        List of command input by user
+    :param db:
+        SQLAlchemy database session
     """
     status = args[0] if args else None
     tasks = list_tasks(db=db, status=status)

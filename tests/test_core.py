@@ -2,8 +2,8 @@
 import sys
 import os
 import pytest
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine  # estabilish database connection
+from sqlalchemy.orm import sessionmaker  # create database session
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
@@ -42,7 +42,7 @@ def test_session(test_engine):
     """
     testingSessionLocal = sessionmaker(
         autocommit=False, autoflush=False, bind=test_engine
-    )  # databse factory to manage the session
+    )  # databse factory to manage the session (explicit commits)
     session = testingSessionLocal()  # new instance of the session
     try:
         yield session  # returns session object to the test functions
@@ -112,8 +112,8 @@ def test_update_title(test_session):
     test_session.commit()
 
     # update the task title
-    message = update_task(1, title='New test title', db=test_session)
-    assert message == 'Task 1 updated title'
+    update_task(1, title='New test title', db=test_session)
+    assert task.title == 'New test title'
 
     # update the task title of one that doesn't exist
     message = update_task(22929, title='New test title', db=test_session)
@@ -130,5 +130,17 @@ def test_update_status(test_session):
     test_session.commit()
 
     for status in statuses:
-        message = update_task(1, status=status, db=test_session)
-        assert message == 'Task 1 updated status'
+        update_task(1, status=status, db=test_session)
+        assert task.status == status
+
+
+def test_update_description(test_session):
+    """
+    Test case for updating a task's description
+    """
+    task = Task(title='Test title', description='Test description')
+    test_session.add(task)
+    test_session.commit()
+
+    update_task(1, description='new description', db=test_session)
+    assert task.description == 'new description'

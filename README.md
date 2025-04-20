@@ -91,7 +91,7 @@ Exiting Task Tracker. Goodbye!
 - [x] Basic CLI functionality
 - [x] ~~JSON~~ SQLite database
 - [x] Some unit tests 
-- [ ] Finish off unit tests
+- [x] Finish off unit tests
 - [ ] Improve CRUD features, like priority, tags, etc
 - [ ] User interface
 
