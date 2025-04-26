@@ -131,17 +131,11 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
         'description': None,
         'due-date': None,
         'status': None,
-<<<<<<< HEAD
         'tags': None,
         'delete-tags': None,
     }
     i = 0
     title_parts = []
-=======
-    }  # dict to store parsed flag values
-    i = 0  # represents the index of input by user
-    title_parts = []  # collect parts of the title - for add command
->>>>>>> 398f1452bc353aced964451d24f33cf814d87f64
 
     # collect title - for add command - until a flag is reached - as you dont need to specify the title i nthe add command
     while i < len(args) and not args[i].startswith('--'):
@@ -152,17 +146,11 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
 
     # parse flags
     while i < len(args):
-<<<<<<< HEAD
-        flag = args[i][2:] if args[i].startswith('--') else args[i]
-        if flag not in allowed_flags:
-            print('Invalid flag!')
-=======
         flag = (
             args[i][2:] if args[i].startswith('--') else args[i]
         )  # extract flag name and remove the '--'
         if flag not in allowed_flags:  # if flag is invalid
             print('Invalid flag')
->>>>>>> 398f1452bc353aced964451d24f33cf814d87f64
             return {}
         if i + 1 >= len(args):
             print('Error: Flag requires a value')  # if flag has no value, print error
@@ -214,15 +202,10 @@ def handle_add_command(args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-<<<<<<< HEAD
-    flags = parse_flags(args, {'title', 'description', 'due-date', 'tags'})
-    if not flags:
-=======
     flags = parse_flags(
         args, {'title', 'description', 'due-date'}
     )  # call parse function w/ args and allowed function
     if not flags:  # if no flags return
->>>>>>> 398f1452bc353aced964451d24f33cf814d87f64
         return
 
     title = flags.get('title')  # make sure a title is present
@@ -254,15 +237,9 @@ def handle_update_command(task_id: int, args: List[str], db: Session) -> None:
         SQLAlchemy database session
     """
     flags = parse_flags(
-<<<<<<< HEAD
-        args, {'title', 'description', 'status', 'due-date', 'tags', 'delete-tags'}
-    )
-    if not flags:
-=======
         args, {'title', 'description', 'status', 'due-date'}
     )  # call parse function w/ args and allowed flags
     if not flags:  # if no flags return
->>>>>>> 398f1452bc353aced964451d24f33cf814d87f64
         return
     if not any(flags.values()):
         print('Error: At least one field required for an update')
