@@ -166,15 +166,18 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
                 parts.append(args[i])
                 i += 1
             result[flag] = ' '.join(parts)
-        elif flag in ('tags', 'delete-tags'):
-            tag_input = args[i + 1]
-            if not isinstance(tag_input, str):
-                print('Error. Tags must be comma seperated')
-                return {}
-            tag_input = tag_input.replace(' ', '')
+        elif flag in ('tags', 'delete-tags'):  # if flag is --tags or --delete-tags
+            parts = []
+            i += 1
+            while i < len(args) and not args[i].startswith('--'):
+                parts.append(args[i])
+                i += 1
+            tag_input = ' '.join(parts).replace(' ', '')
             tags = tag_input.split(',')
+            tags = [tag for tag in tags if tag]
+            if not tags:
+                print('Error: Tag requires a value')
             result[flag] = tags
-            i += 2
         elif flag == 'due-date':
             try:
                 result[flag] = dt.datetime.strptime(
@@ -203,7 +206,7 @@ def handle_add_command(args: List[str], db: Session) -> None:
         SQLAlchemy database session
     """
     flags = parse_flags(
-        args, {'title', 'description', 'due-date'}
+        args, {'title', 'description', 'due-date', 'tags'}
     )  # call parse function w/ args and allowed function
     if not flags:  # if no flags return
         return
@@ -211,6 +214,7 @@ def handle_add_command(args: List[str], db: Session) -> None:
     title = flags.get('title')  # make sure a title is present
     if not title:
         print('Error: add requires a title')
+        return
 
     print(
         add_task(
@@ -237,7 +241,7 @@ def handle_update_command(task_id: int, args: List[str], db: Session) -> None:
         SQLAlchemy database session
     """
     flags = parse_flags(
-        args, {'title', 'description', 'status', 'due-date'}
+        args, {'title', 'description', 'status', 'due-date', 'tags', 'delete-tags'}
     )  # call parse function w/ args and allowed flags
     if not flags:  # if no flags return
         return
@@ -250,6 +254,8 @@ def handle_update_command(task_id: int, args: List[str], db: Session) -> None:
             title=flags.get('title'),
             description=flags.get('description'),
             status=flags.get('status'),
+            tags=flags.get('tags'),
+            delete_tags=flags.get('delete-tags'),
             dueDate=flags.get('due-date'),
             db=db,
         )

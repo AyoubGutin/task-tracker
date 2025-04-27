@@ -78,14 +78,20 @@ def add_task(
 
     if tags:
         for tag_name in tags:
+            tag_name = tag_name.strip().lower()  # normalise tags
+            if not tag_name:
+                continue  # skip empty tags
             try:
-                tag = db.query(Tag).filter(Tag.name == tag_name).first()
-                if not tag:
-                    tag = Tag(name=tag_name)
+                tag = (
+                    db.query(Tag).filter(Tag.name == tag_name).first()
+                )  # check if tag already exists in the Tag table
+                if not tag:  # if it doesn't
+                    tag = Tag(name=tag_name)  # add to the Tag table
                     db.add(tag)
                     db.commit()
-                if tag not in db_task.tags:
-                    db_task.tags.append(tag)
+                if tag not in db_task.tags:  # if tag is not already in the current task
+                    db_task.tags.append(tag)  # add the tag to the task
+                    # ^ it will automatically add the task and tag id to the association table
                     db.commit()
             except Exception as e:
                 print(f'Failed to process tag {tag.name}: {e}')
@@ -98,6 +104,8 @@ def update_task(
     title: Optional[str] = None,
     description: Optional[str] = None,
     status: Optional[str] = None,
+    tags: Optional[List[str]] = None,
+    delete_tags: Optional[List[str]] = None,
     dueDate: Optional[dt.datetime] = None,
     db: Session = None,
 ) -> str:
@@ -112,6 +120,10 @@ def update_task(
         The new description of the task (optional)
     :param status:
         The new status of the task (optional)
+    :param tags:
+        The new tags of the task (optional)
+    :param delete_tags:
+        The tags to be deleted (optional)
     :param dueDate:
         The new due date of the task
     :param db:
@@ -136,6 +148,35 @@ def update_task(
         if dueDate is not None:
             changes[db_task.dueDate] = dueDate
             db_task.dueDate = dueDate
+        if tags is not None:
+            added = []
+            for tag_name in tags:
+                # normalise tags
+                tag_name = tag_name.strip().lower()
+                if not tag_name:
+                    continue  # skip empty tag names
+                tag = db.query(Tag).filter(Tag.name == tag_name).first()
+                if not tag:  # if no tag entry in Tag table
+                    tag = Tag(name=tag_name)
+                    db.add(tag)
+                if tag not in db_task.tags:  # if tag not already in db_task.tags
+                    db_task.tags.append(tag)
+                    added.append(tag_name)
+            if added:
+                changes['added_tags'] = added
+        if delete_tags is not None:
+            deleted = []
+            for tag_name in delete_tags:
+                tag_name = tag_name.strip().lower()  # normalise tags
+                if not tag_name:
+                    continue  # skip empty tag names
+                tag = db.query(Tag).filter(Tag.name == tag_name).first()
+                if tag and tag in db_task.tags:
+                    db_task.tags.remove(tag)
+                    deleted.append(tag_name)
+            if deleted:
+                changes['deleted_tags'] = deleted
+
         db.commit()
         return f'Task {task_id} updated\n\
             {changes}'

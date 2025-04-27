@@ -60,9 +60,8 @@ class Task(Base):
         'Tag', secondary='task_tags', back_populates='tasks'
     )  # defines a many to many relationship with the 'Tag' model
     # 'secondary'=task_tags: specifies the association table and tells SQLAlchemy where to look for these connections
-    # 'back_populates'=tasks: tells to create a 'tasks' attribute on the 'Tag' model that will contain a list of tasks associated with the tags. (i.e urgent.tasks will give a list of urgent tasks). This is creating the reverse side of the relationship for easy navigation 
+    # 'back_populates'=tasks: tells to create a 'tasks' attribute on the 'Tag' model that will contain a list of tasks associated with the tags. (i.e urgent.tasks will give a list of urgent tasks). This is creating the reverse side of the relationship for easy navigation
     # this allows us to have a field, tags, in the 'Task' model, that will behave like a Python list. But, in actual db, the field is managed by the association table w/ foreign keys.
-
 
     def __repr__(self):
         """
@@ -85,11 +84,9 @@ class Tag(Base):
 
     tasks: Mapped[List['Task']] = relationship(
         'Task', secondary='task_tags', back_populates='tags'
-    ) # defines a relationship with 'Task', for the SQLAlchemy model -> many-to-many relationship
+    )  # defines a relationship with 'Task', for the SQLAlchemy model -> many-to-many relationship
     # 'secondary' task_tags, specifies the association table
     # 'back_populates' tags, tells to create a 'tasks' attribute on the 'Task' model that will contain  a list of tasks associated with the task
-    
-
 
 
 task_tags = Table(
