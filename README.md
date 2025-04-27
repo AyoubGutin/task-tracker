@@ -5,11 +5,11 @@ A command-line interface (CLI) tool for managing tasks, built on Python (SQLAlch
 I am making this project, as I would like a local to-do list that is configured for my needs, and is able to run through a terminal.
 
 ### Current Features:
-- **Add**: Create new tasks with a unique ID, title, optional description, and due date
-- **Update Tasks**: Modify task fields, like title, description, status, or due date
+- **Add**: Create new tasks with a unique ID, title, optional description, due date, and tags
+- **Update Tasks**: Modify task fields, like title, description, status, due date, and tags
 - **Delete Tasks**: Remove tasks by ID
 - **Mark Task Status**: Set tasks as 'in-progress', 'done', or 'to-do'
-- **List Tasks**: View all tasks or filter by status
+- **List Tasks**: View all tasks or filter by status and tags
 - **Persistent Storage**: Tasks are stored in a SQLite database
 
 ### Requirements:
@@ -34,9 +34,9 @@ Run the CLI from terminal using python main.py
 
 #### Command	title	Example
 ---
-###### `add <title> [--description <description] [--due-date <YYYY-MM-DD>]` Add a new task `add "Buy groceries"`
+###### `add <title> [--description <description] [--due-date <YYYY-MM-DD>] [--tags <x, y, z>]` Add a new task `add "Buy groceries" --tags shopping`
 ---
-###### `update <id> [--title <title] [--description <description>] [--status <status>] [--due-date <YYYY-MM-DD>]`	Update a task’s title	`update 1 "Buy groceries and cook"`
+###### `update <id> [--title <title] [--description <description>] [--status <status>] [--due-date <YYYY-MM-DD>] [--tags <x, y>] [--delete-tags <z>]`	Update a task’s title	`update 1 "Buy groceries and cook"`
 ---
 ###### `delete <id>` Delete a task by ID `delete 1`
 ---
@@ -44,11 +44,11 @@ Run the CLI from terminal using python main.py
 ---
 ###### `mark-done <id>`	Alternative way to update a status: mark a task as done	`mark-done 1`
 ---
-###### `list [<status>]` List all tasks `list` or `list done`
+###### `list [--status <status>] [--tags <x>]` List all tasks `list` or `list done`
 ---
 ###### `help` Show available commands `help`
 ---
-###### `exit` EWxit the CLI `exit`
+###### `exit` Exit the CLI `exit`
 
 
 ### Example Session
@@ -58,7 +58,7 @@ Commands:
   add <title> [--description <description>] [--due-date <YYYY-MM-DD>] - Add a task
   ...
 
-Enter command: add Write report --description "Include charts and graphs" --due-date 2025-04-25
+Enter command: add --title Write report --description "Include charts and graphs" --due-date 2025-04-25 --tags work, productivity
 Task 1 added
 
 Enter command: update 1 --description "Updated description"
@@ -70,7 +70,8 @@ ID 1
 Title: Write report
 Description: Updated description
 Status: to-do
-Due Date: 2025-04-25 00:00:00
+DueDate: 2025-04-25 00:00:00
+Tags: work, producitivity 
 Created At: 2025-04-18 ...
 Updated At: 2025-04-18 ...
 ---
@@ -92,6 +93,6 @@ Exiting Task Tracker. Goodbye!
 - [x] ~~JSON~~ SQLite database
 - [x] Some unit tests 
 - [x] Finish off unit tests
-- [ ] Improve CRUD features, like priority, tags, etc
+- [x] Improve CRUD features, like tags, etc
 - [ ] User interface
 
