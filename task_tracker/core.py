@@ -1,6 +1,6 @@
 # MODULES
 from typing import List, Optional
-from task_tracker.models import sessionLocal, Task, Tag
+from task_tracker.models import sessionLocal, Task, Tag, task_tags
 from sqlalchemy.orm import Session
 import datetime as dt
 
@@ -205,7 +205,9 @@ def delete_task(task_id: int, db: Session) -> str:
         return f'Task {task_id} not found in the database'
 
 
-def list_tasks(db: Session, status: Optional[str] = None) -> List[Task]:
+def list_tasks(
+    db: Session, status: Optional[str] = None, tags: Optional[List[str]] = None
+) -> List[Task]:
     """
     Lists all the tasks, filtered by status
 
@@ -220,4 +222,12 @@ def list_tasks(db: Session, status: Optional[str] = None) -> List[Task]:
     query = db.query(Task)  # query targeting Task model
     if status:
         query = query.filter(Task.status == status)  # filter by status
+    if tags:
+        normalised_tags = [tag.strip().lower() for tag in tags if tag.strip()]
+        query = (
+            query.join(task_tags)
+            .join(Tag)
+            .filter(Tag.name.in_(normalised_tags))
+            .distinct()
+        )
     return query.all()  # return the query

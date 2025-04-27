@@ -19,7 +19,7 @@ from typing import List, Optional
 Base = declarative_base()  # any class that inheirts from Base is considered a SQLAlchemy ORM model - parent class
 
 engine = create_engine(
-    'sqlite:///./tasks.db', echo=True
+    'sqlite:///./tasks.db'  # , echo=True
 )  # connect to the database, and enable logging of all the statements
 
 sessionLocal = sessionmaker(

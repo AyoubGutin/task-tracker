@@ -309,8 +309,8 @@ def handle_list_command(args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-    status = args[0] if args else None
-    tasks = list_tasks(db=db, status=status)
+    flags = parse_flags(args, {'status', 'tags'})
+    tasks = list_tasks(db=db, status=flags.get('status'), tags=flags.get('tags'))
     if tasks:
         for task in tasks:
             display_task(task)
