@@ -22,10 +22,10 @@ def help():
     """
     print('Commands:')
     print(
-        '  add <title> [--description <description>] [--due-date <YYYY-MM-DD>] - Add a task'
+        '  add <title> [--description <description>] [--due-date <YYYY-MM-DD>] [--tags <tags>]  - Add a task'
     )
     print(
-        '  update <task_id> [--title <title>] [--description <description>] [--status <status>] [--due-date <YYYY-MM-DD>] - Update a task'
+        '  update <task_id> [--title <title>] [--description <description>] [--status <status>] [--due-date <YYYY-MM-DD>] [--tags <tags>] [--delete-tags <tags>] - Update a task'
     )
     print('  delete <task_id> - Delete a task')
     print('  mark-in-progress <task_id> - Mark a task as in progress')
