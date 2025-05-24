@@ -33,7 +33,7 @@ class Task(Base):
     Class maps to the 'tasks' table in the database
     """
 
-    __tablename__ = 'tasks'  # table name
+    __tablename__ = 'tasks' 
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -55,13 +55,35 @@ class Task(Base):
     updatedAt: Mapped[dt.datetime] = mapped_column(
         default=dt.datetime.now, onupdate=dt.datetime.now
     )  # field, updatedAt, which is a DateTime object and defaults and updates as current time
+    
+    # Parent-child relationship logic 
+    parent_id: Mapped[Optional[int]] = mapped_column(
+        ForeignKey('tasks.id'), nullable=True
+    )  # field, parent_id, which is an integer and a foreign key to the 'tasks' table itself (adjaency list)
+    # creates a column that will point to another row in the same table, if null it is a top-level task.
+    
+    parent: Mapped[Optional['Task']] = relationship(
+        'Task', remote_side=[id], back_populates='subtasks'
+    )  # task.parent -> get the parent task of a subtask
+    # remote_id -> look at the ID field to find the parent.
+    subtasks: Mapped[List['Task']] = relationship(
+        'Task', back_populates='parent'
+    )  # task.subtasks -> get list of subtasks for a parent task
 
+    # Tag relationship logic - many-to-many relationship
     tags: Mapped[List['Tag']] = relationship(
         'Tag', secondary='task_tags', back_populates='tasks'
-    )  # defines a many to many relationship with the 'Tag' model
+    )  # task.tags -> get list of tags associated with a task
     # 'secondary'=task_tags: specifies the association table and tells SQLAlchemy where to look for these connections
-    # 'back_populates'=tasks: tells to create a 'tasks' attribute on the 'Tag' model that will contain a list of tasks associated with the tags. (i.e urgent.tasks will give a list of urgent tasks). This is creating the reverse side of the relationship for easy navigation
-    # this allows us to have a field, tags, in the 'Task' model, that will behave like a Python list. But, in actual db, the field is managed by the association table w/ foreign keys.
+
+    # Linked tasks relationship logic - self-referential many-to-many relationship
+    linked_tasks: Mapped[List['Task']] = relationship(
+        'Task',
+        secondary='task_links', # use that association table
+        primaryjoin= 'Task.id == task_links.c.task_id',
+        secondaryjoin = 'Task.id == task_links.c.linked_task_id'
+    )  # task.linked_tasks -> get list of tasks linked to this task
+
 
     def __repr__(self):
         """
@@ -87,14 +109,33 @@ class Tag(Base):
     )  # defines a relationship with 'Task', for the SQLAlchemy model -> many-to-many relationship
     # 'secondary' task_tags, specifies the association table
     # 'back_populates' tags, tells to create a 'tasks' attribute on the 'Task' model that will contain  a list of tasks associated with the task
+    
+    def __repr__(self):
+        """
+        Defines how an instance of the Tag class should be represented as a string, for logging
+        """
+        return f'<Tag(id={self.id}, name={self.name})>'
+    
 
-
+ # Define an association table for the many-to-many relationship between tasks and tags
 task_tags = Table(
     'task_tags',
     Base.metadata,
     Column('task_id', Integer, ForeignKey('tasks.id'), primary_key=True),
     Column('tag_id', Integer, ForeignKey('tags.id'), primary_key=True),
 )
+
+
+# Define an association table for the self-referential many-to-many relationship between tasks
+task_links = Table(
+    'task_links',
+    Base.metadata,
+    Column('task_id', Integer, ForeignKey('tasks.id'), primary_key=True),
+    Column('linked_task_id', Integer, ForeignKey('tasks.id'), primary_key=True)
+) # stores pairs (task_1_id, task_2_id) so these two are linked
+
+
+
 
 
 def init_db():
