@@ -105,14 +105,19 @@ def display_task(task: Task) -> None:
     :param task:
         Task object to be displayed
     """
-    print(f'ID {task.id}')
+    print(f'ID: {task.id}')
     print(f'Title: {task.title}')
     if task.description:
         print(f'Description: {task.description}')
     if task.dueDate:
         print(f'Due Date: {task.dueDate}')
     print(f'Status: {task.status}')
-    print(f'Tags: {", ".join(tag.name for tag in task.tags)}')
+    if task.tags:
+        print(f'Tags: {", ".join(tag.name for tag in task.tags)}')
+    if task.links:
+        print(f'Linked Tasks: {", ".join(str(link.title) for link in task.links)}')
+    if task.parent:
+        print(f'Parent Task: {task.parent.title}')
     print(f'Created At: {task.createdAt}')
     print(f'Updated At: {task.updatedAt}')
 
@@ -133,6 +138,8 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
         'status': None,
         'tags': None,
         'delete-tags': None,
+        'parent': None,
+        'links': None
     }
     i = 0
     title_parts = []
@@ -156,10 +163,7 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
             print('Error: Flag requires a value')  # if flag has no value, print error
             return {}
 
-        if flag in (
-            'title',
-            'description',
-        ):  # if flag is description or title, get the parts
+        if flag in ('title','description'):  # if flag is description or title, get the parts
             parts = []
             i += 1
             while i < len(args) and not args[i].startswith('--'):
@@ -178,6 +182,40 @@ def parse_flags(args: List[str], allowed_flags: set) -> Dict[str, Optional[any]]
             if not tags:
                 print('Error: Tag requires a value')
             result[flag] = tags
+        elif flag == 'parent':
+            try:
+                result[flag] = int(args[i + 1])  # convert to integer
+            except ValueError:
+                print('Error: Parent ID must be a number')
+                return {}
+            i += 2
+        elif flag == 'links':
+            parts = []
+            i += 1
+            while i < len(args) and not args[i].startswith('--'):
+                parts.append(args[i])
+                i += 1
+
+            link_input_str = ' '.join(parts).replace(' ', '')  # remove whitespace
+            if not link_input_str:
+                print('Error: Links require a value')
+                return {}
+            
+            ids_str_list = [s.strip() for s in link_input_str.split(',') if s.strip()]
+            parsed_ids = []
+            if not ids_str_list:
+                print('Error: Links require a value')
+                return {}
+            for id_str in ids_str_list:
+                try:
+                    parsed_ids.append(int(id_str))  # convert to integer
+                except ValueError:
+                    print(f'Error: Invalid link ID {id_str}, must be a number')
+                    return {}
+                parsed_ids.append(int(id_str))
+            
+            result[flag] = parsed_ids  # store the list of IDs
+            
         elif flag == 'due-date':
             try:
                 result[flag] = dt.datetime.strptime(
@@ -205,13 +243,13 @@ def handle_add_command(args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-    flags = parse_flags(
-        args, {'title', 'description', 'due-date', 'tags'}
+    result = parse_flags(
+        args, {'title', 'description', 'due-date', 'tags', 'parent', 'links'}   
     )  # call parse function w/ args and allowed function
-    if not flags:  # if no flags return
+    if not result:  # if no flags return
         return
 
-    title = flags.get('title')  # make sure a title is present
+    title = result.get('title')  # make sure a title is present
     if not title:
         print('Error: add requires a title')
         return
@@ -219,9 +257,11 @@ def handle_add_command(args: List[str], db: Session) -> None:
     print(
         add_task(
             title=title,
-            description=flags.get('description'),
-            dueDate=flags.get('due-date'),
-            tags=flags.get('tags'),
+            description=result.get('description'),
+            dueDate=result.get('due-date'),
+            tags=result.get('tags'),
+            parent=result.get('parent'),
+            links=result.get('links'),
             db=db,
         )
     )
@@ -240,23 +280,23 @@ def handle_update_command(task_id: int, args: List[str], db: Session) -> None:
     :param db:
         SQLAlchemy database session
     """
-    flags = parse_flags(
+    result = parse_flags(
         args, {'title', 'description', 'status', 'due-date', 'tags', 'delete-tags'}
     )  # call parse function w/ args and allowed flags
-    if not flags:  # if no flags return
+    if not result:  # if no flags return
         return
-    if not any(flags.values()):
+    if not any(result.values()):
         print('Error: At least one field required for an update')
 
     print(
         update_task(
             task_id=task_id,
-            title=flags.get('title'),
-            description=flags.get('description'),
-            status=flags.get('status'),
-            tags=flags.get('tags'),
-            delete_tags=flags.get('delete-tags'),
-            dueDate=flags.get('due-date'),
+            title=result.get('title'),
+            description=result.get('description'),
+            status=result.get('status'),
+            tags=result.get('tags'),
+            delete_tags=result.get('delete-tags'),
+            dueDate=result.get('due-date'),
             db=db,
         )
     )

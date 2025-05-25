@@ -46,6 +46,8 @@ def add_task(
     description: Optional[str] = None,
     dueDate: Optional[dt.datetime] = None,
     tags: Optional[List[str]] = None,
+    parent: Optional[int] = None,
+    links: Optional[List[int]] = None,
     db: Session = None,
 ) -> str:
     """
@@ -59,42 +61,64 @@ def add_task(
         The due date of the task to be added (optional)
     :param tags:
         The tags of the task to be added (optional)
+    :param parent:
+        The ID of the parent task (optional)
+    :param links:
+        The IDs of linked tasks (optional)
     :param db:
         SQLAlchemy database session
 
     :return str:
         Output message
     """
+         
+    # STEP 1: Handle Parent Task
+    parent_task = None  # initialise parent_task as None
+    if parent:
+        parent_task = get_task(parent, db)
+        if not parent_task:
+            return f'Parent task {parent} not found'
+
+
+    # STEP 2: Create the Task
     db_task = Task(
         title=title,
         description=description,
         dueDate=dueDate,
+        parent_id=parent
     )  # new instance of the Task model, passing the title
-    db.add(
-        db_task
-    )  #  add new task object to the database session, which then inserts it into the table using db.commit
-    db.commit()
-    db.refresh(db_task)
+    
+    db.add(db_task)
+    
+    
+    # STEP 3: Handle Relationshsips (tags, links)
 
+    # Handle tags
     if tags:
         for tag_name in tags:
             tag_name = tag_name.strip().lower()  # normalise tags
             if not tag_name:
                 continue  # skip empty tags
-            try:
-                tag = (
-                    db.query(Tag).filter(Tag.name == tag_name).first()
-                )  # check if tag already exists in the Tag table
-                if not tag:  # if it doesn't
-                    tag = Tag(name=tag_name)  # add to the Tag table
-                    db.add(tag)
-                    db.commit()
-                if tag not in db_task.tags:  # if tag is not already in the current task
-                    db_task.tags.append(tag)  # add the tag to the task
-                    # ^ it will automatically add the task and tag id to the association table
-                    db.commit()
-            except Exception as e:
-                print(f'Failed to process tag {tag.name}: {e}')
+            tag = db.query(Tag).filter(Tag.name == tag_name).first()  # check if tag already exists in the Tag table
+            if not tag:
+                tag = Tag(name=tag_name)  # add to the Tag table
+                db.add(tag)
+            if tag not in db_task.tags:  # if tag is not already in the current task
+                db_task.tags.append(tag)  # add the tag to the task
+                # ^ it will automatically add the task and tag id to the association table
+
+    # Handle linked tasks
+    if links:
+        for link_id in links:
+            task_to_link = get_task(link_id, db)
+            if task_to_link:
+                # Add the link
+                if task_to_link not in db_task.links:  # check if the task is not already linked
+                    db_task.links.append(task_to_link)
+
+    # STEP 4: Final Commit
+    db.commit()
+    db.refresh(db_task)  # refresh the instance to get the updated id and other fields
 
     return f'Task {db_task.id} added'
 
