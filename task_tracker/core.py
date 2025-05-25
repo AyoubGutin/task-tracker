@@ -131,6 +131,8 @@ def update_task(
     tags: Optional[List[str]] = None,
     delete_tags: Optional[List[str]] = None,
     dueDate: Optional[dt.datetime] = None,
+    parent: Optional[int] = None,
+    links: Optional[List[int]] = None,
     db: Session = None,
 ) -> str:
     """
@@ -150,6 +152,10 @@ def update_task(
         The tags to be deleted (optional)
     :param dueDate:
         The new due date of the task
+    :param parent:
+        The ID of the parent task (optional)
+    :param links:
+        The IDs of linked tasks (optional)
     :param db:
         SQLAlchemy database session
 
@@ -200,6 +206,22 @@ def update_task(
                     deleted.append(tag_name)
             if deleted:
                 changes['deleted_tags'] = deleted
+        if parent is not None:
+            if parent == 0: # if parent is set to 0, remove the parent link
+                if db_task.parent_id is not None:
+                    changes['parent'] = f'Removed parent {db_task.parent_id}'
+            else: # is parent is set to task id
+                # A parent canntot be its own
+                if parent == db_task.id:
+                    return 'A task cannot be its own parent'
+                
+                new_parent_task = get_task(parent, db)
+                if not new_parent_task:
+                    return f'Parent task {parent} not found'
+                
+                if db_task.parent_id != parent:  # if the parent is different
+                    changes['parent'] = parent
+                    db_task.parent_id = parent
 
         db.commit()
         return f'Task {task_id} updated\n\
