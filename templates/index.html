@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <title>Task Tracker | Ayoub Gutin</title>
+    <!--    <link
+      rel="stylesheet"
+    href="{{ url_for('static', filename='css/styles.css') }}"
+    /> -->
+    <link rel="stylesheet" href="../static/css/styles.css" />
+  </head>
+
+  <body>
+    <!-- Main header -->
+    <header>
+      <h1>TASK TRACKER</h1>
+    </header>
+
+    <!-- Navigation Bar-->
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <!-- Form for adding a new task-->
+      <section id="add-task">
+        <form action="#" method="post">
+          <!-- Fieldset for grouping form elements -->
+          <fieldset>
+            <legend>
+              <h2>Add New Task</h2>
+            </legend>
+            <p>
+              <!-- Task title input -->
+              <label for="add-title">Title</label>
+              <input
+                type="text"
+                id="add-title"
+                class="form-field"
+                name="title"
+                required
+              />
+            </p>
+            <p>
+              <!-- Task due date input -->
+              <label for="add-due-date">Due Date</label>
+              <input
+                type="date"
+                id="add-due-date"
+                class="form-date"
+                name="due-date"
+              />
+            </p>
+            <p>
+              <!-- Task tags input -->
+              <label for="add-tags">Tags</label>
+              <input
+                type="text"
+                id="add-tags"
+                class="form-field"
+                name="tags"
+                placeholder="e.g. work, personal"
+              />
+            </p>
+            <p>
+              <!-- Task description input - multiple lines -->
+              <label for="add-description">Description</label>
+              <textarea
+                id="add-description"
+                class="form-field"
+                name="description"
+                placeholder="# Heading"
+              ></textarea>
+            </p>
+            <p>
+              <!-- Select parent task -->
+              <label for="add-parent">Parent Task</label>
+              <select id="add-parent" class="form-select" name="parent">
+                <option value="">No Parent</option>
+                <option value="1">Task 1</option>
+                <option value="2">Task 2</option>
+              </select>
+            </p>
+            <p>
+              <!-- Link related tasks via their title -->
+              <label for="add-link">Link</label>
+              <input
+                type="text"
+                id="add-link"
+                class="form-field"
+                name="link"
+                placeholder="[[Task Title 1]]"
+              />
+            </p>
+            <p>
+              <input type="submit" class="submit" value="Add Task" />
+            </p>
+          </fieldset>
+        </form>
+      </section>
+
+      <section id="update-task">
+        <form action="#" method="post">
+          <fieldset>
+            <legend>
+              <h2>Update Existing Task</h2>
+            </legend>
+            <p>
+              <!-- Task ID Input -->
+              <label for="update-id">Task ID</label>
+              <input
+                type="text"
+                id="update-id"
+                class="form-field"
+                name="task-id"
+                required
+              />
+            </p>
+
+            <p>
+              <!-- Task Title Input -->
+              <label for="update-title">Title</label>
+              <input
+                type="text"
+                id="update-title"
+                class="form-field"
+                name="update-title"
+              />
+            </p>
+
+            <p>
+              <!-- Task Due Date Input -->
+              <label for="update-due-date">Due Date</label>
+              <input
+                type="date"
+                id="update-due-date"
+                class="form-date"
+                name="update-due-date"
+              />
+            </p>
+
+            <p>
+              <!-- Task Tags Input - Update Tags -->
+              <label for="update-tags">Tags</label>
+              <input
+                type="text"
+                id="update-tags"
+                class="form-field"
+                name="update-tags"
+                placeholder="e.g. work, personal"
+              />
+            </p>
+
+            <p>
+              <!-- Task Tags Input - Remove Tags -->
+              <label for="update-remove-tags">Remove Tags</label>
+              <input
+                type="text"
+                id="update-remove-tags"
+                class="form-field"
+                name="update-remove-tags"
+                placeholder="e.g. work, personal"
+              />
+            </p>
+
+            <p>
+              <!-- Task Description Input - multiple lines -->
+              <label for="update-description">Description</label>
+              <textarea
+                class="form-field"
+                id="update-description"
+                name="update-description"
+                placeholder="# Heading"
+              ></textarea>
+            </p>
+
+            <p>
+              <!-- Select Parent Task -->
+              <label for="update-parent">Parent Task</label>
+              <select
+                id="update-parent"
+                class="form-select"
+                name="update-parent"
+              >
+                <option value="">No Parent</option>
+                <option value="1">Task 1</option>
+                <option value="2">Task 2</option>
+              </select>
+            </p>
+
+            <p>
+              <!-- Link Related Tasks - Add -->
+              <label for="update-link">Add Links</label>
+              <input
+                type="text"
+                id="update-link"
+                class="form-field"
+                name="update-link"
+                placeholder="[[Task Title 1]]"
+              />
+            </p>
+
+            <p>
+              <!-- Link Related Tasks - Remove -->
+              <label for="remove-link">Remove Links</label>
+              <input
+                type="text"
+                id="remove-link"
+                class="form-field"
+                name="remove-link"
+                placeholder="[[Task Title 1]]"
+              />
+            </p>
+
+            <p>
+              <input type="submit" class="submit" value="Update Task" />
+            </p>
+          </fieldset>
+        </form>
+      </section>
+
+      <section id="delete-task">
+        <form action="#" method="post">
+          <fieldset>
+            <legend>
+              <h2>Delete Existing Task</h2>
+            </legend>
+            <p>
+              <!-- Task ID Input -->
+              <label for="delete-id">Task ID</label>
+              <input
+                type="text"
+                id="delete-id"
+                class="form-field"
+                name="delete-id"
+                required
+              />
+            </p>
+            <p>
+              <input type="submit" class="submit" value="Delete Task" />
+            </p>
+          </fieldset>
+        </form>
+      </section>
+
+      <section>
+        <h2>Tasks</h2>
+        <ul class="task-list">
+          <!-- This is where the tasks will be displayed, dynamically in the future -->
+          <li>First Task</li>
+          <li>
+            Second Task - Parent
+            <ul>
+              <li>Second Task - Subtask</li>
+              <li>
+                Second Task - Subtask 2
+                <ul>
+                  <li>Second Task - Subtask 2 - Subtask</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p>©Copyright 2025 by Ayoub Gutin. All rights reserved.</p>
+    </footer>
+  </body>
+</html>

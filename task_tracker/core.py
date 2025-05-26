@@ -133,6 +133,7 @@ def update_task(
     dueDate: Optional[dt.datetime] = None,
     parent: Optional[int] = None,
     links: Optional[List[int]] = None,
+    delete_links: Optional[List[int]] = None,
     db: Session = None,
 ) -> str:
     """
@@ -206,6 +207,25 @@ def update_task(
                     deleted.append(tag_name)
             if deleted:
                 changes['deleted_tags'] = deleted
+        if links is not None:
+            added = []
+            for link_id in links:
+                task_to_link = get_task(int(link_id), db)    
+                if task_to_link and task_to_link not in db_task.links:
+                    db_task.links.append(task_to_link)
+                    added.append(link_id)
+            if added:
+                changes['added_links'] = added
+        if delete_links is not None:
+            deleted = []
+            for link_id in delete_links:
+                task_to_unlink = get_task(int(link_id), db)
+                if task_to_unlink and task_to_unlink in db_task.links:
+                    db_task.links.remove(task_to_unlink)
+                    deleted.append(link_id)
+            if deleted:
+                changes['deleted_links'] = deleted
+  
         if parent is not None:
             if parent == 0: # if parent is set to 0, remove the parent link
                 if db_task.parent_id is not None:

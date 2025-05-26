@@ -1,0 +1,34 @@
+/* Handle Basic Styles */
+
+body {
+  /* Font size, line-height, font-family */
+  font: 1em/150% Helvetica, Arial, sans-serif;
+  /* Set padding on all four sides (top,right,bottom,left) */
+  padding: 1em;
+  /* Set top and bottom margins to 0, and auto for left and right */
+  margin: 0 auto;
+  /* Set maximum width the content can occupy (33 * font size) */
+  max-width: 33em;
+}
+
+h1 {
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+h2 + fieldset {
+  margin-top: 0.5em;
+}
+
+fieldset {
+  /* Set border style, width, and color */
+  border: 1px solid #ccc;
+}
+
+li {
+  /* Set margin for list items */
+  margin: 0.5em 0;
+}
