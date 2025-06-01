@@ -1,26 +1,46 @@
 /* Handle Basic Styles */
+html {
+  font-size: 62.5%; /* 1rem = 10px */
+  cursor: default;
+}
 
 body {
   /* Font size, line-height, font-family */
-  font: 1em/150% Helvetica, Arial, sans-serif;
+  font: 1.6rem/150% Helvetica, Arial, sans-serif;
   /* Set padding on all four sides (top,right,bottom,left) */
   padding: 1em;
   /* Set top and bottom margins to 0, and auto for left and right */
   margin: 0 auto;
   /* Set maximum width the content can occupy (33 * font size) */
-  max-width: 33em;
+  max-width: 66em;
 }
 
+/* Handle Headings */
 h1 {
-  font-size: 2em;
+  font-size: 2.5rem;
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 2rem;
 }
 
 h2 + fieldset {
-  margin-top: 0.5em;
+  margin-top: 0.5rem;
+}
+
+/* Handle Form Styles */
+button,
+input,
+select,
+textarea {
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 100%;
+  margin: 0;
+}
+.form-field {
+  overflow: auto;
+  overflow-wrap: break-word;
 }
 
 fieldset {
@@ -28,7 +48,165 @@ fieldset {
   border: 1px solid #ccc;
 }
 
-li {
-  /* Set margin for list items */
-  margin: 0.5em 0;
+input[type='text'],
+input[type='email'],
+input[type='date'] {
+  border: 2px solid #000;
+  margin: 0 0 1em 0;
+  padding: 0.5em;
+  width: 80%;
+}
+
+input[type='submit'] {
+  background-color: #6c757d; /* A neutral button color */
+  color: white;
+  border: none;
+  padding: 1em 1.5em;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.3rem;
+  margin-left: 0.8em; /* Space between buttons if they are side-by-side */
+  transition: background-color 0.2s ease;
+}
+
+input[type='submit']:hover,
+input[type='submit']:focus {
+  background-color: #333;
+}
+
+/* Nav */
+nav {
+  background-color: #f0f0f0;
+  display: flex;
+  height: 10vh;
+}
+
+nav ul {
+  margin: auto;
+  display: inherit;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0;
+  gap: 1.5em;
+}
+
+nav li {
+  list-style: none;
+}
+
+nav a {
+  color: #000;
+  text-decoration: none;
+  padding: 0.5em;
+}
+
+nav li:hover a {
+  background-color: #ccc;
+  border-radius: 0.5em;
+}
+
+nav li.active a {
+  background-color: #333;
+  color: #fff;
+  border-radius: 0.5em;
+}
+
+/* Task List */
+.task-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.task-item {
+  background-color: #f9f9f9;
+
+  border: 1px solid #e0e0e0; /* subtle border */
+  border-left: 3px solid #007bff;
+
+  padding: 1.2rem 1.5rem; /* 12px top/bottom, 15px left/right */
+  margin-bottom: 1rem;
+  border-radius: 4px;
+
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  overflow: hidden; /* Hide child elements that overflow */
+  position: relative; /* Position child action buttons absolutely */
+}
+
+.task-item:hover {
+  background-color: #f0f0f0;
+}
+
+.task-content strong {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: #333;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.task-actoins {
+  margin-top: 10px;
+  text-align: right;
+}
+
+.task-actions button {
+  /* Basic styling for both buttons */
+  background-color: #6c757d; /* A neutral button color */
+  color: white;
+  border: none;
+  padding: 0.6em 1.2em;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1.3rem;
+  margin-left: 0.8em; /* Space between buttons if they are side-by-side */
+  transition: background-color 0.2s ease;
+}
+
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+.delete-btn:hover {
+  background-color: #c82333;
+}
+
+.task-item ul {
+  list-style-type: none;
+  padding-left: 2.5rem;
+  margin-top: 1.5rem;
+  margin-left: -2rem;
+}
+
+/* Floating Action Button */
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+
+  width: 56px;
+  height: 56px;
+
+  background-color: #007bff;
+  color: white;
+
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 2.8rem;
+  font-weight: bold;
+
+  text-decoration: none;
+
+  z-index: 1000;
+
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.fab:hover {
+  background-color: #0056b3;
+  transform: scale(1.1);
 }

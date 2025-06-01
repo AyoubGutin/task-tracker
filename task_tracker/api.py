@@ -10,9 +10,15 @@ def index():
     '''
     return render_template('index.html')
 
+
+@app.route('/task/new', methods=['GET'])
+def add_new_task_page():
+    return render_template('add_task.html')
+
 if __name__ == '__main__':
     '''
     Run the Flask app
     '''
     app.run(debug=True, port=5500)
+
 
