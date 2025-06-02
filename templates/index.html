@@ -16,42 +16,57 @@
     </header>
 
     <!-- Navigation Bar-->
-    <nav>
-      <ul>
-        <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
-        <li><a href="#">Graph View</a></li>
-        <li><a href='#'>Calendar View</a></li>
-      </ul>
-    </nav>
+      <nav>
+        <ul>
+          <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
+          <li><a href="#">Graph View</a></li>
+          <li><a href='#'>Calendar View</a></li>
+        </ul>
+      </nav>
 
-    <section id="task-list">
-      <h2>Task List</h2>
-      <ul class="task-list">
-        <li class="task-item" data-task-id="1">
-          <div class="task-content">
-            <strong>Sample Task Title 1</strong>
-          </div>
-          <div class="task-actions">
-            <button class="edit-btn">Edit</button>
-            <form method = 'POST' action = '#' style="display: inline;">
-              <button type="submit" value = 'delete' class="delete-btn">Delete</button>
-            </form>
-          </div>
-        </li>
-        <li class="task-item" data-task-id="2">
-          <div class="task-content">
-            <strong>Sample Parent</strong>
-          </div>
-            <div class="task-actions">
-              <button class="edit-btn">Edit</button>
-              <form method = 'POST' action = "#" style="display: inline;">
-                <button type="submit" value = 'delete' class="delete-btn">Delete</button>
-              </form>
-            </div>
-            <ul>
-              <li class="task-item" data-task-id="3">
+
+      <main>
+        <section id="task-list">
+          <h2>Task List</h2>
+          <ul class="task-list">
+            <li class="task-item" data-task-id="1">
+              <div class="task-content">
+                <strong>Sample Task Title 1</strong>
+              </div>
+              <div class="task-actions">
+                <button class="edit-btn">Edit</button>
+                <form method = 'POST' action = '#' style="display: inline;">
+                  <button type="submit" value = 'delete' class="delete-btn">Delete</button>
+                </form>
+              </div>
+            </li>
+            <li class="task-item" data-task-id="2">
+              <div class="task-content">
+                <strong>Sample Parent</strong>
+              </div>
+                <div class="task-actions">
+                  <button class="edit-btn">Edit</button>
+                  <form method = 'POST' action = "#" style="display: inline;">
+                    <button type="submit" value = 'delete' class="delete-btn">Delete</button>
+                  </form>
+                </div>
+                <ul>
+                  <li class="task-item" data-task-id="3">
+                    <div class="task-content">
+                      <strong>Sample Child Task</strong>
+                    </div>
+                    <div class="task-actions">
+                      <button class="edit-btn">Edit</button>
+                      <form method = 'POST' action = "#" style="display: inline;">
+                        <button type="submit" value = 'delete' class="delete-btn">Delete</button>
+                      </form>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+              <li class="task-item" data-task-id="4">
                 <div class="task-content">
-                  <strong>Sample Child Task</strong>
+                  <strong>Sample Task Title 2</strong>
                 </div>
                 <div class="task-actions">
                   <button class="edit-btn">Edit</button>
@@ -61,21 +76,8 @@
                 </div>
               </li>
             </ul>
-          </li>
-          <li class="task-item" data-task-id="4">
-            <div class="task-content">
-              <strong>Sample Task Title 2</strong>
-            </div>
-            <div class="task-actions">
-              <button class="edit-btn">Edit</button>
-              <form method = 'POST' action = "#" style="display: inline;">
-                <button type="submit" value = 'delete' class="delete-btn">Delete</button>
-              </form>
-            </div>
-          </li>
-        </ul>
-      </section>
-    </main>
+        </section>
+        </main>
 
     <a href='{{ url_for('add_new_task_page') }}' id="fab-add-task" class="fab" title="Add New Task">+</a>
     <!-- Footer -->

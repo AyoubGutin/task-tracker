@@ -1,19 +1,44 @@
-* {
-  box-sizing: border-box;
-}
 html {
   font-size: 62.5%; /* 1rem = 10px */
   cursor: default;
 }
+* {
+  box-sizing: border-box;
+}
 body {
   /* Font size, line-height, font-family */
   font: 1.6rem/150% Helvetica, Arial, sans-serif;
-  padding: 1em;
   /*  top and bottom margins 0,  auto left and right */
-  margin: 0 auto;
-  max-width: 66em;
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: white; /* Light background color */
+  border: 10px solid #f0f0f0; /* Border around the page */
 }
 
+header {
+  text-align: center;
+  color: #333;
+  padding: 0;
+}
+footer {
+  text-align: center;
+  color: #333;
+  padding: 1rem 0;
+  position: relative;
+  bottom: 0;
+  width: 100%;
+}
+
+main {
+  flex-grow: 1;
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  margin-left: 12rem;
+}
+
+/* ------------------------------------------------------ */
 /* Headings */
 h1 {
   font-size: 2.5rem;
@@ -57,7 +82,7 @@ textarea {
   border: 2px solid #000;
   margin: 0 0 1em 0;
   padding: 0.5em;
-  width: 40%;
+  width: 100%;
 }
 input[type='submit'] {
   background-color: #6c757d; /* A neutral button color */
@@ -79,22 +104,31 @@ input[type='submit']:focus {
 /* ------------------------------------------------------------------ */
 /* Navigation styling */
 nav {
+  width: 12rem;
+  height: 100vh;
   background-color: #f0f0f0;
+  position: fixed;
+  left: 0;
+  top: 0;
   display: flex;
-  height: 10vh;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
 }
 
 nav ul {
-  margin: auto;
-  display: inherit;
-  justify-content: space-around;
-  align-items: center;
+  list-style-type: none;
   padding: 0;
-  gap: 1.5em;
+  margin: 0;
 }
 
-nav li {
-  list-style: none;
+nav li a {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 nav a {
@@ -105,13 +139,11 @@ nav a {
 
 nav li:hover a {
   background-color: #ccc;
-  border-radius: 0.5em;
 }
 
 nav li.active a {
   background-color: #333;
   color: #fff;
-  border-radius: 0.5em;
 }
 
 /* ------------------------------------------------------------------ */
