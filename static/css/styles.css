@@ -1,62 +1,64 @@
-/* Handle Basic Styles */
+* {
+  box-sizing: border-box;
+}
 html {
   font-size: 62.5%; /* 1rem = 10px */
   cursor: default;
 }
-
 body {
   /* Font size, line-height, font-family */
   font: 1.6rem/150% Helvetica, Arial, sans-serif;
-  /* Set padding on all four sides (top,right,bottom,left) */
   padding: 1em;
-  /* Set top and bottom margins to 0, and auto for left and right */
+  /*  top and bottom margins 0,  auto left and right */
   margin: 0 auto;
-  /* Set maximum width the content can occupy (33 * font size) */
   max-width: 66em;
 }
 
-/* Handle Headings */
+/* Headings */
 h1 {
   font-size: 2.5rem;
 }
-
 h2 {
   font-size: 2rem;
 }
 
-h2 + fieldset {
-  margin-top: 0.5rem;
-}
-
-/* Handle Form Styles */
+/* ------------------------------------------------------ */
+/* Form Styles */
 button,
 input,
 select,
 textarea {
-  box-sizing: border-box;
   font-family: inherit;
   font-size: 100%;
-  margin: 0;
-}
-.form-field {
-  overflow: auto;
-  overflow-wrap: break-word;
 }
 
 fieldset {
-  /* Set border style, width, and color */
   border: 1px solid #ccc;
+}
+fieldset legend {
+  font-size: 1.5rem;
+  color: #333;
+
+  padding: 0.5em;
+  margin-bottom: 1em;
+}
+
+textarea {
+  overflow: auto;
+  overflow-wrap: break-word;
+  resize: vertical; /* Allow vertical resizing only */
+  min-height: 10rem;
 }
 
 input[type='text'],
 input[type='email'],
-input[type='date'] {
+input[type='date'],
+textarea {
   border: 2px solid #000;
   margin: 0 0 1em 0;
   padding: 0.5em;
-  width: 80%;
+  width: 40%;
 }
-
 input[type='submit'] {
   background-color: #6c757d; /* A neutral button color */
   color: white;
@@ -74,7 +76,8 @@ input[type='submit']:focus {
   background-color: #333;
 }
 
-/* Nav */
+/* ------------------------------------------------------------------ */
+/* Navigation styling */
 nav {
   background-color: #f0f0f0;
   display: flex;
@@ -111,22 +114,20 @@ nav li.active a {
   border-radius: 0.5em;
 }
 
+/* ------------------------------------------------------------------ */
 /* Task List */
 .task-list {
   list-style-type: none;
   padding-left: 0;
   margin-top: 1rem;
 }
-
 .task-item {
   background-color: #f9f9f9;
-
-  border: 1px solid #e0e0e0; /* subtle border */
+  border: 1px solid #e0e0e0;
   border-left: 3px solid #007bff;
-
-  padding: 1.2rem 1.5rem; /* 12px top/bottom, 15px left/right */
-  margin-bottom: 1rem;
   border-radius: 4px;
+  padding: 1.2rem 1.5rem;
+  margin-bottom: 1rem;
 
   transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
   overflow: hidden; /* Hide child elements that overflow */
@@ -145,21 +146,20 @@ nav li.active a {
   margin-bottom: 0.5rem;
 }
 
-.task-actoins {
+.task-actions {
   margin-top: 10px;
   text-align: right;
 }
 
 .task-actions button {
-  /* Basic styling for both buttons */
-  background-color: #6c757d; /* A neutral button color */
+  background-color: #6c757d;
   color: white;
   border: none;
   padding: 0.6em 1.2em;
   border-radius: 4px;
   cursor: pointer;
   font-size: 1.3rem;
-  margin-left: 0.8em; /* Space between buttons if they are side-by-side */
+  margin-left: 0.8em;
   transition: background-color 0.2s ease;
 }
 
@@ -171,10 +171,8 @@ nav li.active a {
 }
 
 .task-item ul {
-  list-style-type: none;
   padding-left: 2.5rem;
   margin-top: 1.5rem;
-  margin-left: -2rem;
 }
 
 /* Floating Action Button */
