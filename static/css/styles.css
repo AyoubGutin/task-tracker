@@ -1,3 +1,19 @@
+:root {
+  --colour-lightest: #e0aaff;
+  --colour-light-bg: #c77dff;
+  --colour-mid-1: #9d4edd;
+  --colour-mid-2: #7b2cbf;
+  --colour-primary: #7b2cbf; /* buttons */
+  --colour-dark-1: #5a189a;
+  --colour-dark-2: #3c096c;
+  --colour-dark-text: #240046;
+  --colour-darkest: #10002b;
+
+  /* Using a standard danger color for delete actions */
+  --colour-danger: #d74723;
+  --colour-danger-hover: #b9300e;
+}
+
 html {
   font-size: 62.5%; /* 1rem = 10px */
   cursor: default;
@@ -11,17 +27,16 @@ body {
   /*  top and bottom margins 0,  auto left and right */
   margin: 0;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  border: 10px solid #f0f0f0;
-  color: #1a202c;
+  display: flex; /* Turn body into flex container */
+  flex-direction: column; /* Column layout */
+  background-color: #f8f9fa;
+  color: var(--colour-dark-text);
 }
 
 header {
   text-align: center;
-  padding: 0;
   margin-left: 12rem;
+  color: var(--colour-darkest);
 }
 footer {
   text-align: center;
@@ -31,10 +46,14 @@ footer {
   width: 100%;
 }
 
+footer a {
+  color: var(--colour-primary);
+}
+
 main {
-  flex-grow: 1;
+  flex-grow: 1; /* Take up all extra space */
   padding: 2rem 3rem;
-  overflow-y: auto;
+  overflow-y: auto; /* Scroll bar if content exceeds space */
   margin-left: 12rem;
 }
 
@@ -42,15 +61,17 @@ main {
 /* Headings */
 h1 {
   font-size: 4rem;
+  color: var(--colour-darkest);
 }
 h2 {
   font-size: 2rem;
+  color: var(--colour-dark-1);
 }
 
 /* ------------------------------------------------------ */
 /* Form Styles */
 button {
-  background-color: #6c757d;
+  background-color: var(--colour-primary);
   color: white;
   border: none;
   padding: 0.6em 1.2em;
@@ -60,6 +81,10 @@ button {
   margin-left: 0.8em;
   transition: background-color 0.2s ease;
 }
+button:hover {
+  background-color: var(--colour-dark-1);
+}
+
 button,
 input,
 select,
@@ -69,12 +94,11 @@ textarea {
 }
 
 fieldset {
-  border: 1px solid #ccc;
+  border: 1px solid var(--colour-mid-1);
 }
 fieldset legend {
   font-size: 1.5rem;
-  color: #333;
-
+  color: var(--colour-dark-text);
   padding: 0.5em;
   margin-bottom: 1em;
 }
@@ -90,13 +114,13 @@ input[type='text'],
 input[type='email'],
 input[type='date'],
 textarea {
-  border: 2px solid #000;
+  border: 2px solid var(--colour-mid-1);
   margin: 0 0 1em 0;
   padding: 0.5em;
   width: 100%;
 }
 input[type='submit'] {
-  background-color: #6c757d;
+  background-color: var(--colour-primary);
   color: white;
   border: none;
   padding: 1em 1.5em;
@@ -109,7 +133,7 @@ input[type='submit'] {
 
 input[type='submit']:hover,
 input[type='submit']:focus {
-  background-color: #333;
+  background-color: var(--colour-dark-1);
 }
 
 /* ------------------------------------------------------------------ */
@@ -117,14 +141,10 @@ input[type='submit']:focus {
 nav {
   width: 12rem;
   height: 100vh;
-  background-color: #f0f0f0;
+  background-color: var(--colour-darkest);
   position: fixed;
   left: 0;
   top: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0;
 }
 
 nav ul {
@@ -140,23 +160,20 @@ nav li a {
   text-decoration: none;
   margin-bottom: 0.5rem;
   transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-nav a {
-  color: #1a202c;
-  text-decoration: none;
-  padding: 0.5em;
+  color: var(--colour-light-bg);
 }
 
 nav li:hover a {
-  background-color: #ccc;
+  background-color: var(--colour-dark-2);
+  color: white;
+  font-weight: bold;
 }
 
 nav li.active a {
-  background-color: #333;
-  color: #fff;
+  background-color: var(--colour-primary);
+  color: white;
+  font-weight: bold;
 }
-
 /* ------------------------------------------------------------------ */
 /* Task List */
 .task-list {
@@ -165,26 +182,28 @@ nav li.active a {
   margin-top: 1rem;
 }
 .task-item {
-  background-color: #f9f9f9;
-  border: 1px solid #e0e0e0;
-  border-left: 3px solid #0056b3;
-  border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid #eee;
+  border-left: 4px solid var(--colour-primary);
+  border-radius: 8px;
   padding: 1.2rem 1.5rem;
   margin-bottom: 1rem;
-
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out;
   overflow: hidden;
   position: relative;
 }
 
 .task-item:hover {
-  background-color: #f0f0f0;
+  background-color: #fdfdfd;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.07);
 }
 
 .task-content strong {
   font-size: 1.1em;
   font-weight: 600;
-  color: #333;
+  color: var(--colour-dark-text);
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -194,32 +213,19 @@ nav li.active a {
   text-align: right;
 }
 
-button {
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  padding: 0.6em 1.2em;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1.3rem;
-  margin-left: 0.8em;
-  transition: background-color 0.2s ease;
-}
-
 button.edit-btn {
-  background-color: #0056b3;
+  background-color: var(--colour-dark-1);
+}
+button.edit-btn:hover {
+  background-color: var(--colour-dark-2);
 }
 
 button.delete-btn {
-  background-color: #d74723;
-}
-
-button.edit-btn:hover {
-  background-color: #06468a;
+  background-color: var(--colour-danger);
 }
 
 .delete-btn:hover {
-  background-color: #b9300e;
+  background-color: var(--colour-danger-hover);
 }
 
 .task-item ul {
@@ -232,31 +238,23 @@ button.edit-btn:hover {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-
   width: 56px;
   height: 56px;
-
-  background-color: #007bff;
+  background-color: var(--colour-primary);
   color: white;
-
   border-radius: 50%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
-
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
-
   font-size: 2.8rem;
   font-weight: bold;
-
   text-decoration: none;
-
   z-index: 1000;
-
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .fab:hover {
-  background-color: #0056b3;
+  background-color: var(--colour-dark-1);
   transform: scale(1.1);
 }
