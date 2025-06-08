@@ -17,6 +17,7 @@
 html {
   font-size: 62.5%; /* 1rem = 10px */
   cursor: default;
+  scrollbar-width: thin;
 }
 * {
   box-sizing: border-box;
@@ -37,6 +38,15 @@ header {
   text-align: center;
   margin-left: 12rem;
   color: var(--colour-darkest);
+}
+header h1 a {
+  display: inline-block;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+header a:hover {
+  text-decoration: underline;
+  transform: scale(1.01);
 }
 footer {
   text-align: center;
@@ -255,6 +265,27 @@ nav li.active a {
   border-color: var(--colour-primary);
 }
 
+.task-metadata {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.priority-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.priority-dot.high {
+  background-color: #c53030;
+}
+.task-due-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.3rem;
+  color: #718096;
+  font-weight: 500;
+}
 .widget-footer {
   text-align: left;
   padding: 1.5rem 0.5rem;
@@ -299,8 +330,11 @@ nav li.active a {
 /* ------------------------------------------------------------------ */
 /* Bar Chart Styling */
 .chart-container {
+  padding: 1.5rem 2.5rem;
+  margin-top: 4rem;
   background-color: #fff;
-  border-radius: 8px;
+  border: 1px solid #2d3748;
+  border-radius: 12px;
   box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
 }
 
@@ -312,10 +346,17 @@ nav li.active a {
 }
 
 .bar {
+  cursor: pointer;
   width: 10%;
-  background-color: var(--colour-primary);
-  border: 1px solid black;
+  background-color: var(--colour-light-bg);
+  border: 1px solid #2d3748;
   margin-left: auto;
+  transition: all 0.2s ease;
+}
+.bar:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
+  background-color: var(--colour-mid-2);
 }
 .bar:nth-child(1) {
   height: 60%;
@@ -348,7 +389,10 @@ nav li.active a {
 /* ------------------------------------------------------------------ */
 /* Calendar Chart Styling */
 .calendar-container {
-  margin-top: 5rem;
+  border: 1px solid #2d3748;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem 2.5rem;
 }
 .calendar-grid {
   display: grid;

@@ -12,7 +12,9 @@
   <body>
     <!-- Main header -->
     <header>
-      <h1>synapse.</h1>
+        <h1>
+          <a href='/'>synapse.</a>
+      </h1>
     </header>
 
     <!-- Navigation Bar-->
@@ -25,97 +27,82 @@
     </nav>
 
     <main>
-        <div class='chart-container'> <!-- Holds the weekly activity -->
-            <h2>Tasks Completed This Week</h2>
-            <div class='chart-bars'> <!-- Holds the chart bars -->
-                <div class='bar'></div>
-                <div class='bar'></div>
-                <div class='bar'></div>
-                <div class='bar'></div>
-                <div class='bar'></div>
-                <div class='bar'></div>
-                <div class='bar'></div>
-            </div>
-            <div class='chart-labels'>
-                <span>Mon</span>
-                <span>Tue</span>
-                <span>Wed</span>
-                <span>Thu</span>
-                <span>Fri</span>
-                <span>Sat</span>
-                <span>Sun</span>
-            </div>
-        </div>
+      <div class='calendar-container'>
+          <div class='calendar-header'>
+              <h2>Calendar: June 2025</h2>
+              <button class='dropdown'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <button class='back-arrow'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left-icon lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+              </button>
+              <button class='forward-arrow'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right-icon lucide-arrow-right"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              </button>
 
-        <div class='calendar-container'>
-            <div class='calendar-header'>
-                <h2>Calendar: June 2025</h2>
-                <button class='back-arrow'>back</button>
-                <button class='forward-arrow'>forward</button>
-                <button class='dropdown'>dropdown</button>
-            </div>
-            <div class='calendar-grid'>
-                <!--Day Name -->
-                <div class='day-name'>Sun</div>
-                <div class='day-name'>Mon</div>
-                <div class='day-name'>Tue</div>
-                <div class='day-name'>Wed</div>
-                <div class='day-name'>Thur</div>
-                <div class='day-name'>Fri</div>
-                <div class='day-name'>Sat</div>
+          </div>
+          <div class='calendar-grid'>
+              <!--Day Name -->
+              <div class='day-name'>Sun</div>
+              <div class='day-name'>Mon</div>
+              <div class='day-name'>Tue</div>
+              <div class='day-name'>Wed</div>
+              <div class='day-name'>Thur</div>
+              <div class='day-name'>Fri</div>
+              <div class='day-name'>Sat</div>
 
-                <!-- Dates-->
-                <div class='date-cell'><span class='date-number'>1</span></div>
-                <div class='date-cell'><span class='date-number'>2</span></div>
-                <div class='date-cell'><span class='date-number'>3</span></div>
-                <div class='date-cell'><span class='date-number'>4</span></div>
-                <div class='date-cell'><span class='date-number'>5</span></div>
-                <div class='date-cell'><span class='date-number'>6</span></div>
-                <div class='date-cell'><span class='date-number'>7</span></div>
-                <div class='date-cell'><span class='date-number'>8</span></div>
-                <div class='date-cell'><span class='date-number'>9</span></div>
-                <div class='date-cell'><span class='date-number'>10</span></div>
-                <div class='date-cell'><span class='date-number'>11</span></div>
-                <div class='date-cell'><span class='date-number'>12</span></div>
-                <div class='date-cell'><span class='date-number'>13</span></div>
-                <div class='date-cell'><span class='date-number'>14</span></div>
-                <div class='date-cell current-day'>
-                  <span class='date-number'>15</span>
-                  <div class='calendar-task'>
-                    <div class='task-details'>
-                      <span class='task-time'>9:00 AM</span>
-                      <span class='task-title'>Task 1</span>
-                    </div>
-                  </div>
-                  <div class='calendar-task'>
-                    <div class='task-details'>
-                      <span class='task-time'>2:00 PM</span>
-                      <span class='task-title'>Task 2</span>
-                    </div>
+              <!-- Dates-->
+              <div class='date-cell'><span class='date-number'>1</span></div>
+              <div class='date-cell'><span class='date-number'>2</span></div>
+              <div class='date-cell'><span class='date-number'>3</span></div>
+              <div class='date-cell'><span class='date-number'>4</span></div>
+              <div class='date-cell'><span class='date-number'>5</span></div>
+              <div class='date-cell'><span class='date-number'>6</span></div>
+              <div class='date-cell'><span class='date-number'>7</span></div>
+              <div class='date-cell'><span class='date-number'>8</span></div>
+              <div class='date-cell'><span class='date-number'>9</span></div>
+              <div class='date-cell'><span class='date-number'>10</span></div>
+              <div class='date-cell'><span class='date-number'>11</span></div>
+              <div class='date-cell'><span class='date-number'>12</span></div>
+              <div class='date-cell'><span class='date-number'>13</span></div>
+              <div class='date-cell'><span class='date-number'>14</span></div>
+              <div class='date-cell current-day'>
+                <span class='date-number'>15</span>
+                <div class='calendar-task'>
+                  <div class='task-details'>
+                    <span class='task-time'>9:00 AM</span>
+                    <span class='task-title'>Task 1</span>
                   </div>
                 </div>
-                <div class='date-cell'><span class='date-number'>16</span></div>
-                <div class='date-cell'><span class='date-number'>17</span></div>
-                <div class='date-cell'><span class='date-number'>18</span></div>
-                <div class='date-cell'><span class='date-number'>19</span></div>
-                <div class='date-cell'><span class='date-number'>20</span></div>
-                <div class='date-cell'><span class='date-number'>21</span></div>
-                <div class='date-cell'><span class='date-number'>22</span></div>
-                <div class='date-cell'><span class='date-number'>23</span></div>
-                <div class='date-cell'><span class='date-number'>24</span></div>
-                <div class='date-cell'><span class='date-number'>25</span></div>
-                <div class='date-cell'><span class='date-number'>26</span></div>
-                <div class='date-cell'><span class='date-number'>27</span></div>
-                <div class='date-cell'><span class='date-number'>28</span></div>
-                <div class='date-cell'><span class='date-number'>29</span></div>
-                <div class='date-cell'><span class='date-number'>30</span></div>
-                <div class='date-cell'><span class='date-number'>31</span></div>
-                <div class='date-cell'><span class='date-number'>32</span></div>
-                <div class='date-cell'><span class='date-number'>33</span></div>
-                <div class='date-cell'><span class='date-number'>34</span></div>
-                <div class='date-cell'><span class='date-number'>35</span></div>
-            </div>
-        </div>
+                <div class='calendar-task'>
+                  <div class='task-details'>
+                    <span class='task-time'>2:00 PM</span>
+                    <span class='task-title'>Task 2</span>
+                  </div>
+                </div>
+              </div>
+              <div class='date-cell'><span class='date-number'>16</span></div>
+              <div class='date-cell'><span class='date-number'>17</span></div>
+              <div class='date-cell'><span class='date-number'>18</span></div>
+              <div class='date-cell'><span class='date-number'>19</span></div>
+              <div class='date-cell'><span class='date-number'>20</span></div>
+              <div class='date-cell'><span class='date-number'>21</span></div>
+              <div class='date-cell'><span class='date-number'>22</span></div>
+              <div class='date-cell'><span class='date-number'>23</span></div>
+              <div class='date-cell'><span class='date-number'>24</span></div>
+              <div class='date-cell'><span class='date-number'>25</span></div>
+              <div class='date-cell'><span class='date-number'>26</span></div>
+              <div class='date-cell'><span class='date-number'>27</span></div>
+              <div class='date-cell'><span class='date-number'>28</span></div>
+              <div class='date-cell'><span class='date-number'>29</span></div>
+              <div class='date-cell'><span class='date-number'>30</span></div>
+              <div class='date-cell'><span class='date-number'>31</span></div>
+              <div class='date-cell'><span class='date-number'>32</span></div>
+              <div class='date-cell'><span class='date-number'>33</span></div>
+              <div class='date-cell'><span class='date-number'>34</span></div>
+              <div class='date-cell'><span class='date-number'>35</span></div>
+          </div>
+      </div>
 
     </main>
 

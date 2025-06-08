@@ -13,7 +13,9 @@
   <body>
     <!-- Main header -->
     <header>
-      <h1>synapse.</h1>
+      <h1>
+        <a href='/'>synapse.</a>
+      </h1>
     </header>
 
     <!-- Navigation Bar-->
@@ -42,6 +44,12 @@
               <span>Sample Parent</span>
             </div>
             <div class='task-actions-placeholder'></div>
+            <div class='task-metadata'>
+              <div class='task-due-date'>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-icon lucide-calendar"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+              <span>June 15</span>
+              <div class='priority-dot high'></div>
+            </div>
           </li>
           <li class='widget-task-item'>
             <div class='task-info indented'>
@@ -63,6 +71,28 @@
           <a href='#'>show more.</a>
         </div>
       </div>
+    
+       <div class='chart-container'> <!-- Holds the weekly activity -->
+            <h2>tasks completed.</h2>
+            <div class='chart-bars'> <!-- Holds the chart bars -->
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+            </div>
+            <div class='chart-labels'>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+                <span>Sun</span>
+            </div>
+        </div>
     </main>
 
     <a href='{{ url_for('add_new_task_page') }}' id='fab-add-task' class='fab' title='Add New Task'>+</a>
