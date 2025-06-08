@@ -23,7 +23,7 @@ html {
 }
 body {
   /* Font size, line-height, font-family */
-  font: 1.6rem/150% Helvetica, Arial, sans-serif;
+  font: 1.6rem/150% 'Monsterrat', Helvetica, Arial, sans-serif;
   /*  top and bottom margins 0,  auto left and right */
   margin: 0;
   min-height: 100vh;
@@ -43,7 +43,7 @@ footer {
   padding: 1rem 0;
   position: relative;
   bottom: 0;
-  width: 100%;
+  margin-left: 12rem;
 }
 
 footer a {
@@ -61,11 +61,11 @@ main {
 /* Headings */
 h1 {
   font-size: 4rem;
-  color: var(--colour-darkest);
+  color: var(--colour-dark-1);
 }
 h2 {
   font-size: 2rem;
-  color: var(--colour-dark-1);
+  color: var(--colour-dark-2);
 }
 
 /* ------------------------------------------------------ */
@@ -80,6 +80,7 @@ button {
   font-size: 1.3rem;
   margin-left: 0.8em;
   transition: background-color 0.2s ease;
+  font-weight: 600;
 }
 button:hover {
   background-color: var(--colour-dark-1);
@@ -129,6 +130,7 @@ input[type='submit'] {
   font-size: 1.3rem;
   margin-left: 0.8em;
   transition: background-color 0.2s ease;
+  font-weight: 600;
 }
 
 input[type='submit']:hover,
@@ -258,3 +260,6 @@ button.delete-btn {
   background-color: var(--colour-dark-1);
   transform: scale(1.1);
 }
+
+/* ------------------------------------------------------------------ */
+/* Navigation styling */

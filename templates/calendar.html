@@ -1,0 +1,66 @@
+<html lang='en-GB'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Task Tracker | Ayoub Gutin</title>
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap' rel='stylesheet'>
+  <link rel='stylesheet' href='{{ url_for('static', filename='css/styles.css') }}'/> 
+  </head>
+
+  <body>
+    <!-- Main header -->
+    <header>
+      <h1>Task Tracker</h1>
+    </header>
+
+    <!-- Navigation Bar-->
+    <nav>
+      <ul>
+        <li class='active'><a href='{{ url_for('index') }}'>Home</a></li>
+        <li><a href='#'>Graph </a></li>
+        <li><a href='{{ url_for('calendar_page') }}'>Calendar</a></li>
+      </ul>
+    </nav>
+
+    <main>
+        <div class='chart-container'> <!-- Holds the weekly activity -->
+            <h2>Tasks This Week</h2>
+            <div class='chart-bars'> <!-- Holds the calendar bars -->
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+                <div class='bar'></div>
+            </div>
+            <div class='chart-labels'>
+                <span>Mon</span>
+                <span>Tue</span>
+                <span>Wed</span>
+                <span>Thu</span>
+                <span>Fri</span>
+                <span>Sat</span>
+                <span>Sun</span>
+        </div>
+
+    </main>
+
+
+    <a href='{{ url_for('add_new_task_page') }}' id='fab-add-task' class='fab' title='Add New Task'>+</a>
+    <!-- Footer -->
+    <footer>
+      <p>
+        &copy; 2025 Ayoub Gutin |
+        <a href='https://github.com/yourusername/task-tracker'
+          >GitHub Repository</a
+        />
+      </p>
+    </footer>
+  </body>
+
+  <script src='../static/js/scripts.js'>
+
+</html>

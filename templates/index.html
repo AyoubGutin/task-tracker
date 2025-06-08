@@ -1,93 +1,97 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang='en-GB'>
   <head>
-    <meta charset="utf-8" />
+    <meta charset='utf-8' />
     <title>Task Tracker | Ayoub Gutin</title>
-    <link
-      rel="stylesheet"
-    href="{{ url_for('static', filename='css/styles.css') }}"
-    /> 
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap' rel='stylesheet'>
+  <link rel='stylesheet' href='{{ url_for('static', filename='css/styles.css') }}'/> 
   </head>
 
   <body>
     <!-- Main header -->
     <header>
-      <h1>TASK TRACKER</h1>
+      <h1>Task Tracker</h1>
     </header>
 
     <!-- Navigation Bar-->
-      <nav>
-        <ul>
-          <li class="active"><a href="{{ url_for('index') }}">Home</a></li>
-          <li><a href="#">Graph </a></li>
-          <li><a href='#'>Calendar</a></li>
-        </ul>
-      </nav>
+    <nav>
+      <ul>
+        <li class='active'><a href='{{ url_for('index') }}'>Home</a></li>
+        <li><a href='#'>Graph </a></li>
+        <li><a href='{{ url_for('calendar_page') }}'>Calendar</a></li>
+      </ul>
+    </nav>
 
-
-      <main>
-        <section id="task-list">
-          <h2>Task List</h2>
-          <ul class="task-list">
-            <li class="task-item" data-task-id="1">
-              <div class="task-content">
-                <strong>Sample Task Title 1</strong>
+    <main>
+      <section id='task-list'>
+        <h2>Task List</h2>
+        <ul class='task-list'>
+          <li class='task-item' data-task-id='1'>
+            <div class='task-content'>
+              <strong>Sample Task Title 1</strong>
+            </div>
+            <div class='task-actions'>
+              <button class='edit-btn'>Edit</button>
+              <form method = 'POST' action = '#' style='display: inline;'>
+                <button type='submit' value = 'delete' class='delete-btn'>Delete</button>
+              </form>
+            </div>
+          </li>
+          <li class='task-item' data-task-id='2'>
+            <div class='task-content'>
+              <strong>Sample Parent</strong>
+            </div>
+              <div class='task-actions'>
+                <button class='edit-btn'>Edit</button>
+                <form method = 'POST' action = '#' style='display: inline;'>
+                  <button type='submit' value = 'delete' class='delete-btn'>Delete</button>
+                </form>
               </div>
-              <div class="task-actions">
-                <button class="edit-btn">Edit</button>
-                <form method = 'POST' action = '#' style="display: inline;">
-                  <button type="submit" value = 'delete' class="delete-btn">Delete</button>
+              <ul>
+                <li class='task-item' data-task-id='3'>
+                  <div class='task-content'>
+                    <strong>Sample Child Task</strong>
+                  </div>
+                  <div class='task-actions'>
+                    <button class='edit-btn'>Edit</button>
+                    <form method = 'POST' action = '#' style='display: inline;'>
+                      <button type='submit' value = 'delete' class='delete-btn'>Delete</button>
+                    </form>
+                  </div>
+                </li>
+              </ul>
+          </li>
+            <li class='task-item' data-task-id='4'>
+              <div class='task-content'>
+                <strong>Sample Task Title 2</strong>
+              </div>
+              <div class='task-actions'>
+                <button class='edit-btn'>Edit</button>
+                <form method = 'POST' action = '#' style='display: inline;'>
+                  <button type='submit' value = 'delete' class='delete-btn'>Delete</button>
                 </form>
               </div>
             </li>
-            <li class="task-item" data-task-id="2">
-              <div class="task-content">
-                <strong>Sample Parent</strong>
-              </div>
-                <div class="task-actions">
-                  <button class="edit-btn">Edit</button>
-                  <form method = 'POST' action = "#" style="display: inline;">
-                    <button type="submit" value = 'delete' class="delete-btn">Delete</button>
-                  </form>
-                </div>
-                <ul>
-                  <li class="task-item" data-task-id="3">
-                    <div class="task-content">
-                      <strong>Sample Child Task</strong>
-                    </div>
-                    <div class="task-actions">
-                      <button class="edit-btn">Edit</button>
-                      <form method = 'POST' action = "#" style="display: inline;">
-                        <button type="submit" value = 'delete' class="delete-btn">Delete</button>
-                      </form>
-                    </div>
-                  </li>
-                </ul>
-              </li>
-              <li class="task-item" data-task-id="4">
-                <div class="task-content">
-                  <strong>Sample Task Title 2</strong>
-                </div>
-                <div class="task-actions">
-                  <button class="edit-btn">Edit</button>
-                  <form method = 'POST' action = "#" style="display: inline;">
-                    <button type="submit" value = 'delete' class="delete-btn">Delete</button>
-                  </form>
-                </div>
-              </li>
-            </ul>
-        </section>
-        </main>
+        </ul>
+      </section>
+    </main>
 
-    <a href='{{ url_for('add_new_task_page') }}' id="fab-add-task" class="fab" title="Add New Task">+</a>
+    <a href='{{ url_for('add_new_task_page') }}' id='fab-add-task' class='fab' title='Add New Task'>+</a>
     <!-- Footer -->
     <footer>
       <p>
         &copy; 2025 Ayoub Gutin |
-        <a href="https://github.com/yourusername/task-tracker"
+        <a href='https://github.com/yourusername/task-tracker'
           >GitHub Repository</a
         />
       </p>
     </footer>
   </body>
+
+  <script src='../static/js/scripts.js'>
+
 </html>
+
