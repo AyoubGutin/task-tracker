@@ -101,7 +101,6 @@ fieldset legend {
   font-size: 1.5rem;
   color: var(--colour-dark-text);
   padding: 0.5em;
-  margin-bottom: 1em;
 }
 
 textarea {
@@ -262,4 +261,69 @@ button.delete-btn {
 }
 
 /* ------------------------------------------------------------------ */
-/* Navigation styling */
+/* Bar Chart Styling */
+.chart-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
+}
+
+.chart-bars {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  height: 250px;
+}
+
+.bar {
+  width: 10%;
+  background-color: var(--colour-primary);
+  border: 1px solid black;
+  margin-left: auto;
+}
+.bar:nth-child(1) {
+  height: 60%;
+}
+.bar:nth-child(2) {
+  height: 85%;
+}
+.bar:nth-child(3) {
+  height: 5%;
+}
+.bar:nth-child(4) {
+  height: 5%;
+}
+.bar:nth-child(5) {
+  height: 15%;
+}
+.bar:nth-child(6) {
+  height: 10%;
+}
+.bar:nth-child(7) {
+  height: 85%;
+}
+
+.chart-labels {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 1rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Calendar Chart Styling */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 equal columns */
+  grid-auto-rows: minmax(100px, auto);
+  column-gap: 10px;
+  row-gap: 1em;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 1rem;
+  align-items: center;
+  justify-items: center;
+}
+
+.calendar-header {
+  margin-bottom: 3rem;
+}

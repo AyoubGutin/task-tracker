@@ -18,16 +18,16 @@
     <!-- Navigation Bar-->
     <nav>
       <ul>
-        <li class='active'><a href='{{ url_for('index') }}'>Home</a></li>
+        <li><a href='{{ url_for('index') }}'>Home</a></li>
         <li><a href='#'>Graph </a></li>
-        <li><a href='{{ url_for('calendar_page') }}'>Calendar</a></li>
+        <li class='active'><a href='{{ url_for('calendar_page') }}'>Calendar</a></li>
       </ul>
     </nav>
 
     <main>
         <div class='chart-container'> <!-- Holds the weekly activity -->
-            <h2>Tasks This Week</h2>
-            <div class='chart-bars'> <!-- Holds the calendar bars -->
+            <h2>Tasks Completed This Week</h2>
+            <div class='chart-bars'> <!-- Holds the chart bars -->
                 <div class='bar'></div>
                 <div class='bar'></div>
                 <div class='bar'></div>
@@ -44,6 +44,63 @@
                 <span>Fri</span>
                 <span>Sat</span>
                 <span>Sun</span>
+            </div>
+        </div>
+
+        <div class='calendar.container'>
+            <div class='calendar-header'>
+                <h2>Calendar: June 2025</h2>
+                <button class='back-arrow'>back</button>
+                <button class='forward-arrow'>forward</button>
+                <button class='dropdown'>dropdown</button>
+            </div>
+            <div class='calendar-grid'>
+                <!--Day Name -->
+                <div class='day-name'>Sun</div>
+                <div class='day-name'>Mon</div>
+                <div class='day-name'>Tue</div>
+                <div class='day-name'>Wed</div>
+                <div class='day-name'>Thur</div>
+                <div class='day-name'>Fri</div>
+                <div class='day-name'>Sat</div>
+
+                <!-- Dates-->
+                <div class='date-cell'>1</div>
+                <div class='date-cell'>2</div>
+                <div class='date-cell'>3</div>
+                <div class='date-cell'>4</div>
+                <div class='date-cell'>5</div>
+                <div class='date-cell'>6</div>
+                <div class='date-cell'>7</div>
+                <div class='date-cell'>8</div>
+                <div class='date-cell'>9</div>
+                <div class='date-cell'>10</div>
+                <div class='date-cell'>11</div>
+                <div class='date-cell'>12</div>
+                <div class='date-cell'>13</div>
+                <div class='date-cell'>14</div>
+                <div class='date-cell'>15</div>
+                <div class='date-cell'>16</div>
+                <div class='date-cell'>17</div>
+                <div class='date-cell'>18</div>
+                <div class='date-cell'>19</div>
+                <div class='date-cell'>20</div>
+                <div class='date-cell'>21</div>
+                <div class='date-cell'>22</div>
+                <div class='date-cell'>23</div>
+                <div class='date-cell'>24</div>
+                <div class='date-cell'>25</div>
+                <div class='date-cell'>26</div>
+                <div class='date-cell'>27</div>
+                <div class='date-cell'>28</div>
+                <div class='date-cell'>29</div>
+                <div class='date-cell'>30</div>
+                <div class='date-cell'>31</div>
+                <div class='date-cell'>32</div>
+                <div class='date-cell'>33</div>
+                <div class='date-cell'>34</div>
+                <div class='date-cell'>35</div>
+            </div>
         </div>
 
     </main>

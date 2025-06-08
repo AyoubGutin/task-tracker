@@ -18,9 +18,9 @@
     <!-- Navigation Bar-->
     <nav>
       <ul>
-        <li class='active'><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
         <li><a href="#">Graph</a></li>
-        <li><a href='#'>Calendar View</a></li>
+        <li><a href='{{ url_for('calendar_page') }}'>Calendar</a></li>
       </ul>
     </nav>
 
