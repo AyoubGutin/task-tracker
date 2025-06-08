@@ -67,8 +67,6 @@ main {
   margin-left: 12rem;
 }
 
-/* ------------------------------------------------------ */
-/* Headings */
 h1 {
   font-size: 4rem;
   color: var(--colour-dark-1);
@@ -79,15 +77,28 @@ h2 {
 }
 
 /* ------------------------------------------------------ */
+/* Dashboard Grid Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+.dashboard-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ------------------------------------------------------ */
 /* Form Styles */
 button,
 .btn {
   text-decoration: none;
   background-color: var(--colour-primary);
-  color: white;
+  color: #fff;
   border: none;
   padding: 0.6em 1.2em;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 1.3rem;
   margin-left: 0.8em;
@@ -122,20 +133,25 @@ textarea {
 }
 
 input[type='text'],
-input[type='email'],
 input[type='date'],
 textarea {
+  flex-grow: 1;
   border: 2px solid var(--colour-mid-1);
+  border-radius: 8px;
   margin: 0 0 1em 0;
   padding: 0.5em;
   width: 100%;
+}
+input[type='text']::placeholder,
+textarea::placeholder {
+  color: #a0aec0;
 }
 input[type='submit'] {
   background-color: var(--colour-primary);
   color: white;
   border: none;
   padding: 1em 1.5em;
-  border-radius: 4px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 1.3rem;
   margin-left: 0.8em;
@@ -186,13 +202,41 @@ nav li.active a {
   color: white;
   font-weight: bold;
 }
+
 /* ------------------------------------------------------------------ */
-/* Task List */
+/* Goal Focus Widget */
+.goal-focus-widget {
+  background-color: #fff;
+  border: 1px solid var(--colour-lightest);
+  border-radius: 12px;
+  padding: 1rem 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.goal-input-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.goal-input-group input[type='text'] {
+  font-size: 1.6rem;
+  margin: 0;
+}
+.goal-input-group input[type='text']:focus {
+  outline: none;
+  border-color: var(--colour-primary);
+  box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.15);
+}
+
+/* ------------------------------------------------------------------ */
+/* Task List Widget */
 .task-widget {
   background-color: #fff;
   border-radius: 12px;
-  padding: 1.5rem 2.5rem;
-  border: 1px solid #2d3748;
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--colour-lightest);
+  margin-bottom: 2rem;
 }
 
 .task-widget h2 {
@@ -268,12 +312,12 @@ nav li.active a {
 .task-metadata {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
 }
 .priority-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  margin-left: 2rem;
 }
 .priority-dot.high {
   background-color: #c53030;
@@ -301,6 +345,98 @@ nav li.active a {
   text-decoration: underline;
 }
 
+/* ------------------------------------------------------------------ */
+/* Project Widget Styling */
+.projects-widget {
+  background-color: #fff;
+  border: 1px solid var(--colour-lightest);
+  border-radius: 12px;
+  padding: 1rem 2.5rem;
+}
+
+.project-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.project-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2 ease;
+}
+
+.project-item:hover {
+  background-color: #f8f9fa;
+}
+.project-item:hover .project-name {
+  font-weight: bold;
+  transform: scale(1.01);
+}
+.project-info {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.project-icon {
+  width: 24px;
+  height: 24px;
+  background-color: var(--colour-lightest);
+  border-radius: 8px;
+}
+.project-name {
+  font-weight: 500;
+  color: var(--colour-dark-text);
+}
+
+.project-progress {
+  width: 100px;
+  height: 8px;
+  background-color: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  width: 70px;
+  height: 100%;
+  background-color: var(--colour-primary);
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Map Widget Styling */
+.graph-preview-widget {
+  background-color: #fff;
+  border: 1px solid var(--colour-lightest);
+  border-radius: 12px;
+  padding: 1rem 2.5rem;
+}
+.graph-preview-widget h3 {
+  color: var(--colour-darkest);
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.graph-placeholder {
+  width: 100%;
+  height: 220px;
+  border-radius: 8px;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3csvg width='200' height='150' xmlns='http://www.w3.org/2000/svg'%3e%3cstyle%3e.node %7b fill: %23e0aaff; stroke: %239d4edd; stroke-width: 2; %7d .line %7b stroke: %23cbd5e1; stroke-width: 2; %7d%3c/style%3e%3cline x1='50' y1='75' x2='150' y2='30' class='line'/%3e%3cline x1='50' y1='75' x2='150' y2='120' class='line'/%3e%3ccircle cx='50' cy='75' r='15' class='node'/%3e%3ccircle cx='150' cy='30' r='10' class='node'/%3e%3ccircle cx='150' cy='120' r='10' class='node'/%3e%3c/svg%3e");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 60%;
+}
+
+/* ------------------------------------------------------------------ */
 /* Floating Action Button */
 .fab {
   position: fixed;
@@ -325,65 +461,6 @@ nav li.active a {
 .fab:hover {
   background-color: var(--colour-dark-1);
   transform: scale(1.1);
-}
-
-/* ------------------------------------------------------------------ */
-/* Bar Chart Styling */
-.chart-container {
-  padding: 1.5rem 2.5rem;
-  margin-top: 4rem;
-  background-color: #fff;
-  border: 1px solid #2d3748;
-  border-radius: 12px;
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
-}
-
-.chart-bars {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  height: 250px;
-}
-
-.bar {
-  cursor: pointer;
-  width: 10%;
-  background-color: var(--colour-light-bg);
-  border: 1px solid #2d3748;
-  margin-left: auto;
-  transition: all 0.2s ease;
-}
-.bar:hover {
-  transform: scale(1.01);
-  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
-  background-color: var(--colour-mid-2);
-}
-.bar:nth-child(1) {
-  height: 60%;
-}
-.bar:nth-child(2) {
-  height: 85%;
-}
-.bar:nth-child(3) {
-  height: 5%;
-}
-.bar:nth-child(4) {
-  height: 5%;
-}
-.bar:nth-child(5) {
-  height: 15%;
-}
-.bar:nth-child(6) {
-  height: 10%;
-}
-.bar:nth-child(7) {
-  height: 85%;
-}
-
-.chart-labels {
-  display: flex;
-  justify-content: space-around;
-  padding-top: 1rem;
 }
 
 /* ------------------------------------------------------------------ */

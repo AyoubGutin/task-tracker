@@ -71,7 +71,7 @@ def add_task(
     :return str:
         Output message
     """
-         
+
     # STEP 1: Handle Parent Task
     parent_task = None  # initialise parent_task as None
     if parent:
@@ -79,18 +79,13 @@ def add_task(
         if not parent_task:
             return f'Parent task {parent} not found'
 
-
     # STEP 2: Create the Task
     db_task = Task(
-        title=title,
-        description=description,
-        dueDate=dueDate,
-        parent_id=parent
+        title=title, description=description, dueDate=dueDate, parent_id=parent
     )  # new instance of the Task model, passing the title
-    
+
     db.add(db_task)
-    
-    
+
     # STEP 3: Handle Relationshsips (tags, links)
 
     # Handle tags
@@ -99,7 +94,9 @@ def add_task(
             tag_name = tag_name.strip().lower()  # normalise tags
             if not tag_name:
                 continue  # skip empty tags
-            tag = db.query(Tag).filter(Tag.name == tag_name).first()  # check if tag already exists in the Tag table
+            tag = (
+                db.query(Tag).filter(Tag.name == tag_name).first()
+            )  # check if tag already exists in the Tag table
             if not tag:
                 tag = Tag(name=tag_name)  # add to the Tag table
                 db.add(tag)
@@ -113,7 +110,9 @@ def add_task(
             task_to_link = get_task(link_id, db)
             if task_to_link:
                 # Add the link
-                if task_to_link not in db_task.links:  # check if the task is not already linked
+                if (
+                    task_to_link not in db_task.links
+                ):  # check if the task is not already linked
                     db_task.links.append(task_to_link)
 
     # STEP 4: Final Commit
@@ -210,7 +209,7 @@ def update_task(
         if links is not None:
             added = []
             for link_id in links:
-                task_to_link = get_task(int(link_id), db)    
+                task_to_link = get_task(int(link_id), db)
                 if task_to_link and task_to_link not in db_task.links:
                     db_task.links.append(task_to_link)
                     added.append(link_id)
@@ -225,20 +224,20 @@ def update_task(
                     deleted.append(link_id)
             if deleted:
                 changes['deleted_links'] = deleted
-  
+
         if parent is not None:
-            if parent == 0: # if parent is set to 0, remove the parent link
+            if parent == 0:  # if parent is set to 0, remove the parent link
                 if db_task.parent_id is not None:
                     changes['parent'] = f'Removed parent {db_task.parent_id}'
-            else: # is parent is set to task id
+            else:  # is parent is set to task id
                 # A parent canntot be its own
                 if parent == db_task.id:
                     return 'A task cannot be its own parent'
-                
+
                 new_parent_task = get_task(parent, db)
                 if not new_parent_task:
                     return f'Parent task {parent} not found'
-                
+
                 if db_task.parent_id != parent:  # if the parent is different
                     changes['parent'] = parent
                     db_task.parent_id = parent
