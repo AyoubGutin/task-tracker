@@ -25,20 +25,20 @@
     </nav>
 
     <main>
-      <!-- Form for adding a new task-->
-      <section id="add-task">
+      <!-- Form for editing a new task-->
+      <section id="edit-task">
         <form action="#" method="post">
           <!-- Fieldset for grouping form elements -->
           <fieldset>
             <legend>
-              <h2>add task.</h2>
+              <h2>edit task.</h2>
             </legend>
             <p>
               <!-- Task title input -->
-              <label for="add-title">Title</label>
+              <label for="edit-title">Title</label>
               <input
                 type="text"
-                id="add-title"
+                id="edit-title"
                 class="form-field"
                 name="title"
                 required
@@ -46,20 +46,20 @@
             </p>
             <p>
               <!-- Task due date input -->
-              <label for="add-due-date">Due Date</label>
+              <label for="edit-due-date">Due Date</label>
               <input
                 type="date"
-                id="add-due-date"
+                id="edit-due-date"
                 class="form-date"
                 name="due-date"
               />
             </p>
             <p>
               <!-- Task tags input -->
-              <label for="add-tags">Tags</label>
+              <label for="edit-tags">Tags</label>
               <input
                 type="text"
-                id="add-tags"
+                id="edit-tags"
                 class="form-field"
                 name="tags"
                 placeholder="e.g. work, personal"
@@ -67,9 +67,9 @@
             </p>
             <p>
               <!-- Task description input - multiple lines -->
-              <label for="add-description">Description</label>
+              <label for="edit-description">Description</label>
               <textarea
-                id="add-description"
+                id="edit-description"
                 class="form-field"
                 name="description"
                 placeholder="# Heading"
@@ -77,8 +77,8 @@
             </p>
             <p>
               <!-- Select parent task -->
-              <label for="add-parent">Parent Task</label>
-              <select id="add-parent" class="form-select" name="parent">
+              <label for="edit-parent">Parent Task</label>
+              <select id="edit-parent" class="form-select" name="parent">
                 <option value="">No Parent</option>
                 <option value="1">Task 1</option>
                 <option value="2">Task 2</option>
@@ -86,17 +86,17 @@
             </p>
             <p>
               <!-- Link related tasks via their title -->
-              <label for="add-link">Link</label>
+              <label for="edit-link">Link</label>
               <input
                 type="text"
-                id="add-link"
+                id="edit-link"
                 class="form-field"
                 name="link"
                 placeholder="[[Task Title 1]]"
               />
             </p>
             <p>
-              <input type="submit" class="submit" value="add task" />
+              <input type="submit" class="submit" value="edit task" />
             </p>
           </fieldset>
         </form>

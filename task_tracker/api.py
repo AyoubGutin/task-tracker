@@ -17,6 +17,11 @@ def add_new_task_page():
     return render_template('add_task.html')
 
 
+@app.route('/task/edit', methods=['GET'])
+def edit_task_page():
+    return render_template('edit_task.html')
+
+
 @app.route('/calendar', methods=['GET'])
 def calendar_page():
     return render_template('calendar.html')

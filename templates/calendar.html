@@ -12,15 +12,15 @@
   <body>
     <!-- Main header -->
     <header>
-      <h1>Task Tracker</h1>
+      <h1>synapse.</h1>
     </header>
 
     <!-- Navigation Bar-->
     <nav>
       <ul>
-        <li><a href='{{ url_for('index') }}'>Home</a></li>
-        <li><a href='#'>Graph </a></li>
-        <li class='active'><a href='{{ url_for('calendar_page') }}'>Calendar</a></li>
+        <li><a href='{{ url_for('index') }}'>home.</a></li>
+        <li><a href='#'>graph.</a></li>
+        <li class='active'><a href='{{ url_for('calendar_page') }}'>calendar.</a></li>
       </ul>
     </nav>
 
@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class='calendar.container'>
+        <div class='calendar-container'>
             <div class='calendar-header'>
                 <h2>Calendar: June 2025</h2>
                 <button class='back-arrow'>back</button>
@@ -65,41 +65,55 @@
                 <div class='day-name'>Sat</div>
 
                 <!-- Dates-->
-                <div class='date-cell'>1</div>
-                <div class='date-cell'>2</div>
-                <div class='date-cell'>3</div>
-                <div class='date-cell'>4</div>
-                <div class='date-cell'>5</div>
-                <div class='date-cell'>6</div>
-                <div class='date-cell'>7</div>
-                <div class='date-cell'>8</div>
-                <div class='date-cell'>9</div>
-                <div class='date-cell'>10</div>
-                <div class='date-cell'>11</div>
-                <div class='date-cell'>12</div>
-                <div class='date-cell'>13</div>
-                <div class='date-cell'>14</div>
-                <div class='date-cell'>15</div>
-                <div class='date-cell'>16</div>
-                <div class='date-cell'>17</div>
-                <div class='date-cell'>18</div>
-                <div class='date-cell'>19</div>
-                <div class='date-cell'>20</div>
-                <div class='date-cell'>21</div>
-                <div class='date-cell'>22</div>
-                <div class='date-cell'>23</div>
-                <div class='date-cell'>24</div>
-                <div class='date-cell'>25</div>
-                <div class='date-cell'>26</div>
-                <div class='date-cell'>27</div>
-                <div class='date-cell'>28</div>
-                <div class='date-cell'>29</div>
-                <div class='date-cell'>30</div>
-                <div class='date-cell'>31</div>
-                <div class='date-cell'>32</div>
-                <div class='date-cell'>33</div>
-                <div class='date-cell'>34</div>
-                <div class='date-cell'>35</div>
+                <div class='date-cell'><span class='date-number'>1</span></div>
+                <div class='date-cell'><span class='date-number'>2</span></div>
+                <div class='date-cell'><span class='date-number'>3</span></div>
+                <div class='date-cell'><span class='date-number'>4</span></div>
+                <div class='date-cell'><span class='date-number'>5</span></div>
+                <div class='date-cell'><span class='date-number'>6</span></div>
+                <div class='date-cell'><span class='date-number'>7</span></div>
+                <div class='date-cell'><span class='date-number'>8</span></div>
+                <div class='date-cell'><span class='date-number'>9</span></div>
+                <div class='date-cell'><span class='date-number'>10</span></div>
+                <div class='date-cell'><span class='date-number'>11</span></div>
+                <div class='date-cell'><span class='date-number'>12</span></div>
+                <div class='date-cell'><span class='date-number'>13</span></div>
+                <div class='date-cell'><span class='date-number'>14</span></div>
+                <div class='date-cell current-day'>
+                  <span class='date-number'>15</span>
+                  <div class='calendar-task'>
+                    <div class='task-details'>
+                      <span class='task-time'>9:00 AM</span>
+                      <span class='task-title'>Task 1</span>
+                    </div>
+                  </div>
+                  <div class='calendar-task'>
+                    <div class='task-details'>
+                      <span class='task-time'>2:00 PM</span>
+                      <span class='task-title'>Task 2</span>
+                    </div>
+                  </div>
+                </div>
+                <div class='date-cell'><span class='date-number'>16</span></div>
+                <div class='date-cell'><span class='date-number'>17</span></div>
+                <div class='date-cell'><span class='date-number'>18</span></div>
+                <div class='date-cell'><span class='date-number'>19</span></div>
+                <div class='date-cell'><span class='date-number'>20</span></div>
+                <div class='date-cell'><span class='date-number'>21</span></div>
+                <div class='date-cell'><span class='date-number'>22</span></div>
+                <div class='date-cell'><span class='date-number'>23</span></div>
+                <div class='date-cell'><span class='date-number'>24</span></div>
+                <div class='date-cell'><span class='date-number'>25</span></div>
+                <div class='date-cell'><span class='date-number'>26</span></div>
+                <div class='date-cell'><span class='date-number'>27</span></div>
+                <div class='date-cell'><span class='date-number'>28</span></div>
+                <div class='date-cell'><span class='date-number'>29</span></div>
+                <div class='date-cell'><span class='date-number'>30</span></div>
+                <div class='date-cell'><span class='date-number'>31</span></div>
+                <div class='date-cell'><span class='date-number'>32</span></div>
+                <div class='date-cell'><span class='date-number'>33</span></div>
+                <div class='date-cell'><span class='date-number'>34</span></div>
+                <div class='date-cell'><span class='date-number'>35</span></div>
             </div>
         </div>
 
