@@ -11,13 +11,6 @@
   </head>
 
   <body>
-    <!-- Main header -->
-    <header>
-      <h1>
-        <a href='/'>synapse.</a>
-      </h1>
-    </header>
-
     <!-- Navigation Bar-->
     <nav>
       <ul>
@@ -28,9 +21,12 @@
     </nav>
 
     <main>
-      <h1>good morning, ayoub.</h1>
-      <div class='dashboard-grid'>
+      <div class = 'main-header'>
+        <h1 class='app-logo'>synapse.</h1>
+        <div class='profile-avatar'></div>
+      </div>
 
+      <div class='dashboard-grid'>
         <!-- Left Column-->
         <div class='dashboard-column'>
           <!-- Goal Focus Widget -->
@@ -52,8 +48,11 @@
             </div>
 
             <ul class='widget-task-list'>
-              <li class='widget-task-item'>
+              <li class='widget-task-item is-parent'>
                 <div class='task-info'>
+                  <svg class="expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points='9 18 15 12 9 6'></polyline>
+                  </svg>
                   <span class='status-icon'></span>
                   <span>Objective 1</span>
                 </div>
@@ -114,7 +113,7 @@
             </ul>
           </div>
           <div class='graph-preview-widget'>
-            <h3>goal map.</h3>
+            <h2>goal map.</h2>
             <div class='graph-placeholder'></div>
             <div class='widget-footer'>
               <a href='#'>expand.</a>

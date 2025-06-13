@@ -18,6 +18,7 @@ html {
   font-size: 62.5%; /* 1rem = 10px */
   cursor: default;
   scrollbar-width: thin;
+  height: 100%;
 }
 * {
   box-sizing: border-box;
@@ -34,20 +35,6 @@ body {
   color: var(--colour-dark-text);
 }
 
-header {
-  text-align: center;
-  margin-left: 12rem;
-  color: var(--colour-darkest);
-}
-header h1 a {
-  display: inline-block;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-header a:hover {
-  text-decoration: underline;
-  transform: scale(1.01);
-}
 footer {
   text-align: center;
   padding: 1rem 0;
@@ -70,10 +57,34 @@ main {
 h1 {
   font-size: 4rem;
   color: var(--colour-dark-1);
+  font-weight: 700;
 }
 h2 {
   font-size: 2rem;
   color: var(--colour-dark-2);
+}
+
+/* ------------------------------------------------------------------ */
+/* Main Header */
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.app-logo {
+  font-size: 2.8rem;
+  color: var(--colour-primary);
+  margin: 0;
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: var(--colour-primary);
+  cursor: pointer;
 }
 
 /* ------------------------------------------------------ */
@@ -82,11 +93,6 @@ h2 {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 2rem;
-}
-.dashboard-column {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
 }
 
 /* ------------------------------------------------------ */
@@ -206,11 +212,11 @@ nav li.active a {
 /* ------------------------------------------------------------------ */
 /* Goal Focus Widget */
 .goal-focus-widget {
-  background-color: #fff;
-  border: 1px solid var(--colour-lightest);
+  background-color: #faf5ff;
   border-radius: 12px;
-  padding: 1rem 2.5rem;
+  padding: 2rem 3.5rem;
   margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
 }
 
 .goal-input-group {
@@ -237,6 +243,7 @@ nav li.active a {
   padding: 1rem 2.5rem;
   border: 1px solid var(--colour-lightest);
   margin-bottom: 2rem;
+  flex-grow: 1;
 }
 
 .task-widget h2 {
@@ -279,6 +286,16 @@ nav li.active a {
   align-items: center;
   padding: 1.2rem 0.5rem;
   border-bottom: 1px solid #e2e8f0;
+}
+
+.expand-icon {
+  stroke: #718096;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: transform 0.2s ease;
+}
+.is-expanded .expand-icon {
+  transform: rotate(90deg);
 }
 
 .task-info {
@@ -352,6 +369,7 @@ nav li.active a {
   border: 1px solid var(--colour-lightest);
   border-radius: 12px;
   padding: 1rem 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .project-list {
@@ -399,7 +417,7 @@ nav li.active a {
 
 .project-progress {
   width: 100px;
-  height: 8px;
+  height: 4px;
   background-color: #e2e8f0;
   border-radius: 4px;
   overflow: hidden;
@@ -418,9 +436,9 @@ nav li.active a {
   border: 1px solid var(--colour-lightest);
   border-radius: 12px;
   padding: 1rem 2.5rem;
+  margin-bottom: 2rem;
 }
 .graph-preview-widget h3 {
-  color: var(--colour-darkest);
   font-size: 1.8rem;
   margin: 0;
 }
