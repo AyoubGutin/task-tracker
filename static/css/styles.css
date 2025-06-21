@@ -48,7 +48,7 @@ footer a {
 }
 
 main {
-  flex-grow: 1; /* Take up all extra space */
+  flex-grow: 1;
   padding: 2rem 3rem;
   overflow-y: auto; /* Scroll bar if content exceeds space */
   margin-left: 12rem;
@@ -244,6 +244,7 @@ nav li.active a {
   border: 1px solid var(--colour-lightest);
   margin-bottom: 2rem;
   flex-grow: 1;
+  overflow-x: hidden;
 }
 
 .task-widget h2 {
@@ -280,12 +281,23 @@ nav li.active a {
   padding: 0;
   margin: 0;
 }
+
 .widget-task-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1.2rem 0.5rem;
   border-bottom: 1px solid #e2e8f0;
+  transition: all 0.3s ease-out;
+  opacity: 1;
+  transform: translateX(0);
+  height: auto;
+  margin-bottom: 10px;
+}
+.widget-task-item.slide-out {
+  opacity: 0;
+  transform: translateX(100%);
+  pointer-events: none; /* Make it unclickable */
 }
 
 .expand-icon {
@@ -324,6 +336,9 @@ nav li.active a {
 }
 .status-icon:hover {
   border-color: var(--colour-primary);
+}
+.status-icon.checked {
+  background-color: var(--colour-light-bg);
 }
 
 .task-metadata {
