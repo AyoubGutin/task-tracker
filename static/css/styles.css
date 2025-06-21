@@ -246,7 +246,6 @@ nav li.active a {
   flex-grow: 1;
   overflow-x: hidden;
 }
-
 .task-widget h2 {
   margin-bottom: 2rem;
 }
@@ -284,10 +283,10 @@ nav li.active a {
 
 .widget-task-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  width: 100%;
   padding: 1.2rem 0.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 0.5px solid #e2e8f0;
   transition: all 0.3s ease-out;
   opacity: 1;
   transform: translateX(0);
@@ -300,12 +299,14 @@ nav li.active a {
   pointer-events: none; /* Make it unclickable */
 }
 
-.expand-icon {
-  stroke: #718096;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  transition: transform 0.2s ease;
+.task-main-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 5px;
 }
+
 .is-expanded .expand-icon {
   transform: rotate(90deg);
 }
@@ -314,13 +315,43 @@ nav li.active a {
   display: flex;
   align-items: center;
   gap: 1.2rem;
-}
-.task-info.indented {
-  padding-left: 3.2rem;
+  flex-grow: 1;
 }
 .task-info span {
   font-size: 1.5rem;
   font-weight: 500;
+}
+
+.sub-tasks {
+  list-style: none;
+  padding-left: 3em;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  display: none; /* Hide by default */
+}
+.sub-tasks .widget-task-item {
+  margin-left: 25px;
+  border-bottom: none;
+}
+.widget-task-item.expanded > .sub-tasks {
+  max-height: 500px;
+  opacity: 1;
+  display: block;
+}
+.expand-icon {
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+  transform: rotate(0deg);
+  margin-right: 5px;
+  min-width: 16px;
+  min-height: 16px;
+  stroke: var(--colour-dark-text);
+}
+.widget-task-item.expanded .expand-icon {
+  transform: rotate(90deg);
+  color: var(--colour-primary);
 }
 
 .status-icon {

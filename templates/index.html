@@ -42,41 +42,43 @@
             <h2>my tasks.</h2>
         
             <div class='widget-tabs'>
-              <button class='tab-btn active'>to-do.</button>
-              <button class='tab-btn'>overdue.</button>
-              <button class='tab-btn'>completed.</button>
+              <button class='tab-btn active' data-status='todo'>to-do.</button>
+              <button class='tab-btn' data-status='completed'>completed.</button>
+              <button class='tab-btn' data-status='overdue'>overdue.</button>
             </div>
 
+
             <ul id='task-list' class='widget-task-list'>
-              <li class='widget-task-item is-parent'>
-                <div class='task-info'>
-                  <svg class="expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <polyline points='9 18 15 12 9 6'></polyline>
-                  </svg>
-                  <span class='status-icon'></span>
-                  <span>Objective 1</span>
-                </div>
-                <div class='task-actions-placeholder'></div>
-                <div class='task-metadata'>
-                  <div class='task-due-date'>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-icon lucide-calendar"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
-                  <span>June 15</span>
-                  <div class='priority-dot high'></div>
-                </div>
-              </li>
-              <li class='widget-task-item'>
-                <div class='task-info indented'>
-                  <span class='status-icon'></span>
-                  <span>Sub objective</span>
-                </div>
-                <div class='task-actions-placeholder'></div>
-              </li>
-              <li class='widget-task-item'>
+              <li class='widget-task-item is-parent' data-status='todo' data-task-id='task-1'>
+                <div class='task-main-row'>
+                  <div class='task-info'>
+                    <svg class="expand-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points='9 18 15 12 9 6'></polyline>
+                    </svg>
+                    <span class='status-icon'></span>
+                    <span>Objective 1</span>
+                  </div>
+                  <div class='task-metadata'>
+                    <div class='task-due-date'>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-icon lucide-calendar"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+                      <span>June 15</span>
+                      <div class='priority-dot high'></div>
+                    </div>
+                  </div>
+                </div> <ul class="sub-tasks">
+                  <li class='widget-task-item' data-status='todo' data-task-id='sub-task-1-1' data-parent-id='task-1'>
+                    <div class='task-info indented'> <span class='status-icon'></span>
+                      <span>Sub objective</span>
+                    </div>
+                    <div class='task-actions-placeholder'></div>
+                  </li>
+                  </ul>
+
+              </li> <li class='widget-task-item' data-status='completed' data-task-id='task-2'>
                 <div class='task-info'>
                   <span class='status-icon'></span>
                   <span>Objective 2</span>
                 </div>
-                <div class='task-actions-placeholder'></div>
               </li>
             </ul>
 

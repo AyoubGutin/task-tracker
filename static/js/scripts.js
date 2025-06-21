@@ -28,3 +28,67 @@ taskList.addEventListener('click', (event) => {
     }
   }
 });
+
+// ---- Tab Switching Logic ----
+
+// Get all tab buttons
+const taskFilterTabs = document.querySelectorAll('.tab-btn');
+
+// Function to handle showing / hidiing tasks based on the active tab
+function filterTasks(selectedStatus) {
+  //  Get all task items
+  const allTaskItems = document.querySelectorAll(
+    '#task-list .widget-task-item'
+  );
+
+  // Loop through each task
+  allTaskItems.forEach((taskItem) => {
+    // Get status of current task item from its data-status attribute
+    const taskStatus = taskItem.dataset.status;
+
+    // Conditions to show/hide tasks based on selected status
+    let shouldShow = false;
+    if (selectedStatus === 'todo' && taskStatus === 'todo') {
+      shouldShow = true; // Show if it's a todo task
+    } else if (selectedStatus === 'completed' && taskStatus == 'completed') {
+      shouldShow = true; // Show if it's a completed task
+    } else if (selectedStatus === 'overdue' && taskStatus === 'overdue') {
+      shouldShow = true; // Show if it's an overdue task
+    }
+
+    if (shouldShow) {
+      taskItem.style.display = ''; // Default display (show the task)
+    } else {
+      taskItem.style.display = 'none'; // Hide the task
+    }
+  });
+}
+
+// Add click listeners for the tabs
+taskFilterTabs.forEach((tab) => {
+  tab.addEventListener('click', () => {
+    // Remove 'active' class from all tabs
+    taskFilterTabs.forEach((t) => t.classList.remove('active'));
+    // Add 'active' class to the clicked tab
+    tab.classList.add('active');
+    // Get the status from the clicked tab
+    const selectedStatus = tab.dataset.status;
+    // Call the filter function with the selected status
+    filterTasks(selectedStatus);
+  });
+});
+
+// Initial Filter / Default
+filterTasks('todo'); // Show todo tasks by default
+
+// ---- Task Expansion/Collapse Logic ----
+taskList.addEventListener('click', (event) => {
+  if (event.target.classList.contains('expand-icon')) {
+    const expandIcon = event.target; // reference to the icon
+    const parentTaskItem = expandIcon.closest('.widget-task-item.is-parent'); // find the closest parent task item
+
+    if (parentTaskItem) {
+      parentTaskItem.classList.toggle('expanded');
+    }
+  }
+});
