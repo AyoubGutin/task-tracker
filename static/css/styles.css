@@ -70,7 +70,7 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 3rem;
+  margin-bottom: 5rem;
 }
 
 .app-logo {
@@ -285,7 +285,7 @@ nav li.active a {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 1.2rem 0.5rem;
+  padding: 0.3rem 0.5rem;
   border-bottom: 0.5px solid #e2e8f0;
   transition: all 0.3s ease-out;
   opacity: 1;
@@ -299,7 +299,7 @@ nav li.active a {
   pointer-events: none; /* Make it unclickable */
 }
 
-.task-main-row {
+.task-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -314,7 +314,7 @@ nav li.active a {
 .task-info {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1rem;
   flex-grow: 1;
 }
 .task-info span {
@@ -322,24 +322,24 @@ nav li.active a {
   font-weight: 500;
 }
 
+/* Sub Task */
 .sub-tasks {
   list-style: none;
-  padding-left: 3em;
   max-height: 0;
-  overflow: hidden;
   opacity: 0;
   transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+  padding-left: 5rem;
   display: none; /* Hide by default */
 }
 .sub-tasks .widget-task-item {
-  margin-left: 25px;
   border-bottom: none;
 }
 .widget-task-item.expanded > .sub-tasks {
   max-height: 500px;
   opacity: 1;
-  display: block;
+  display: flex;
 }
+
 .expand-icon {
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
@@ -362,7 +362,7 @@ nav li.active a {
   border: 2px solid var(--colour-lightest);
   border-radius: 50%;
   cursor: pointer;
-  transition: all 0.2 ease;
+  transition: all 0.2s ease;
   position: relative;
 }
 .status-icon:hover {
@@ -370,26 +370,33 @@ nav li.active a {
 }
 .status-icon.checked {
   background-color: var(--colour-light-bg);
+  border: none;
 }
 
 .task-metadata {
   display: flex;
   align-items: center;
+  gap: 1rem;
 }
+
 .priority-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  margin-left: 2rem;
+  background-color: black; /* Default color */
 }
 .priority-dot.high {
   background-color: #c53030;
 }
+.priority-dot.medium {
+  background-color: #dd6b20;
+}
+
 .task-due-date {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  font-size: 1.3rem;
+  font-size: 1rem;
   color: #718096;
   font-weight: 500;
 }
@@ -435,7 +442,7 @@ nav li.active a {
   padding: 1.2rem;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2 ease;
+  transition: all 0.2s ease;
 }
 
 .project-item:hover {
@@ -525,6 +532,7 @@ nav li.active a {
 .fab:hover {
   background-color: var(--colour-dark-1);
   transform: scale(1.1);
+  cursor: pointer;
 }
 
 /* ------------------------------------------------------------------ */
@@ -602,4 +610,70 @@ nav li.active a {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* ------ Modal Styles ------ */
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-color: rgba(0, 0, 0, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-out visibility 0.3s ease-out;
+  pointer-events: none; /* Prevent interaction when not active */
+  display: none;
+}
+.modal-container.active {
+  opacity: 1;
+  display: flex;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  position: relative;
+  max-width: 500px;
+  width: 90%;
+  transform: translateY(-50px);
+  opacity: 0;
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+.modal-container.active .modal-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.close-modal-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--colour-dark-text);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+  padding: 0;
+}
+.close-modal-btn:hover {
+  color: var(--colour-danger);
+  background: none;
+}
+
+.modal-content h3 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: var(--colour-dark-1);
+  margin-top: 0;
 }

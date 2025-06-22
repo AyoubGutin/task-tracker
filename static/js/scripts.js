@@ -92,3 +92,39 @@ taskList.addEventListener('click', (event) => {
     }
   }
 });
+
+// ----- Modal Logic -----
+const addTaskModal = document.getElementById('add-task-modal');
+const fabAddTask = document.getElementById('fab-add-task');
+const modalCloseBtn = addTaskModal.querySelector('.close-modal-btn');
+
+// Open/Close modal function
+function toggleModal() {
+  addTaskModal.classList.toggle('active');
+}
+
+if (fabAddTask) {
+  fabAddTask.addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent default link behaviour
+    toggleModal();
+  });
+}
+
+if (modalCloseBtn) {
+  modalCloseBtn.addEventListener('click', toggleModal);
+}
+
+// Close Modal when clicking outside the modal content or when escaping
+if (addTaskModal) {
+  addTaskModal.addEventListener('click', (event) => {
+    if (event.target === addTaskModal) {
+      toggleModal();
+    }
+  });
+}
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && addTaskModal.classList.contains('active')) {
+    toggleModal();
+  }
+});
