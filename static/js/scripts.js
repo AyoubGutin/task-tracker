@@ -123,8 +123,98 @@ if (addTaskModal) {
   });
 }
 
+const generateTaskModal = document.getElementById('generate-task-modal');
+const generateTaskButton = document.getElementById('open-generate-task-modal');
+const generateModalCloseBtn = generateTaskModal.querySelector(
+  '.close-modal-btn.generate-modal-close'
+);
+
+const generateFormStage = document.getElementById('generate-form-stage');
+const generateLoadingStage = document.getElementById('generate-loading-stage');
+const generatePreviewStage = document.getElementById('generate-preview-stage');
+
+const generateButton = document.getElementById('generate-btn');
+const confirmTaskButton = document.getElementById('confirm-task-btn');
+const editTaskButton = document.getElementById('edit-task-btn');
+
+function showGenerateModalStage(stageElement) {
+  const stages = generateTaskModal.querySelectorAll('.modal-stage');
+  stages.forEach((stage) => stage.classList.remove('active'));
+  stageElement.classList.add('active');
+}
+
+function openGenerateTaskModal() {
+  if (generateTaskModal) {
+    generateTaskModal.classList.add('active');
+    showGenerateModalStage(generateFormStage); // Show the form stage by default
+  }
+}
+
+function closeGenerateTaskModal() {
+  if (generateTaskModal) {
+    generateTaskModal.classList.remove('active');
+  }
+}
+
+if (generateTaskButton) {
+  generateTaskButton.addEventListener('click', () => {
+    openGenerateTaskModal();
+  });
+}
+
+if (generateModalCloseBtn) {
+  generateModalCloseBtn.addEventListener('click', closeGenerateTaskModal);
+}
+
+if (generateTaskModal) {
+  generateTaskModal.addEventListener('click', (event) => {
+    if (event.target === generateTaskModal) {
+      closeGenerateTaskModal();
+    }
+  });
+}
+
 document.addEventListener('keydown', (event) => {
-  if (event.key === 'Escape' && addTaskModal.classList.contains('active')) {
-    toggleModal();
+  if (event.key === 'Escape') {
+    if (addTaskModal && addTaskModal.classList.contains('active')) {
+      toggleModal();
+    } else if (
+      generateTaskModal &&
+      generateTaskModal.classList.contains('active')
+    ) {
+      closeGenerateTaskModal();
+    }
   }
 });
+
+if (generateButton) {
+  generateButton.addEventListener('click', () => {
+    const objective = document.getElementById('objective-input').value;
+    const dueDate = document.getElementById('generate-task-deadline').value;
+    const priority = document.getElementById('generate-task-priority').value;
+    const scope = document.getElementById('generate-task-scope').value;
+
+    console.log(
+      `generating tasks with ${objective}, ${dueDate}, ${priority}, ${scope}`
+    );
+
+    showGenerateModalStage(generateLoadingStage);
+
+    // Simulate API call
+    setTimeout(() => {
+      showGenerateModalStage(generatePreviewStage);
+    }, 2000); // placeholder for generation time
+  });
+}
+
+if (confirmTaskButton) {
+  confirmTaskButton.addEventListener('click', () => {
+    closeGenerateTaskModal();
+  });
+}
+
+if (editTaskButton) {
+  editTaskButton.addEventListener('click', () => {
+    showGenerateModalStage(generateFormStage);
+  });
+}

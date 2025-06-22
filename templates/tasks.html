@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang='en-GB'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Task Tracker | Ayoub Gutin</title>
+  <link rel='preconnect' href='https://fonts.googleapis.com'>
+  <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' rel='stylesheet'>
+  <link href='https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap' rel='stylesheet'>
+  <link rel='stylesheet' href='{{ url_for('static', filename='css/styles.css') }}'/> 
+  </head>
+
+  <body>
+    <!-- Navigation Bar-->
+    <nav>
+      <ul>
+        <li class='active'><a href='{{ url_for('index') }}'>home.</a></li>
+        <li><a href='#'>graph.</a></li>
+        <li><a href='{{ url_for('calendar_page') }}'>calendar.</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <div class = 'main-header'>
+        <h1 class='app-logo'>synapse.</h1>
+        <div class='profile-avatar'></div>
+      </div>
+
+      <div class='task-list-container'>
+        <div class='task-filters'>
+            <input type='text' id='task-search' placeholder='search tasks...' />
+            <div class='filter-labels'>
+                <span class='filter-label'>filter.</span>
+                <select id='filter-by-project' class='dropdown'>
+                    <option value='all'>all projects</option>
+                    <option value='project1'>project 1</option>
+                    <option value='project2'>project 2</option>
+                    <option value='project3'>project 3</option>
+                </select>
+
+                <select id='filter-by-priority' class='dropdown'>
+                    <option value='all'>all priorities</option>
+                    <option value='high'>high</option>
+                    <option value='medium'>medium</option>
+                    <option value='low'>low</option>
+                </select>
+
+                <select id='filter-by-tag' class='dropdown'>
+                    <option value='all'>all tags</option>
+                    <option value='tag1'>tag 1</option>
+                    <option value='tag2'>tag 2</option>
+                    <option value='tag3'>tag 3</option>
+                </select>
+
+                <button id='clear-filters' class='btn clear-filters'>clear filters.</button>
+            </div>
+        </div>
+
+        <div class = 'widget-tabs'>
+            <button class='tab-btn active' data-status='todo'>todo.</button>
+            <button class='tab-btn' data-status='completed'>completed.</button>
+            <button class='tab-btn' data-status='overdue'>overdue.</button>
+            <button class='tab-btn' data-status='all'>all.</button>
+        </div>
+
+        <ul id='task-list' class='widget-task-list'>
+            <p>Loading tasks... </p> 
+        </ul>
+
+        <div class='widget-footer'>
+            <a href='{{ url_for('index') }}'>dashboard.</a>
+        </div>
+      </div>
+
+    </main>
+</body>

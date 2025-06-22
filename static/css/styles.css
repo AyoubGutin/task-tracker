@@ -1,84 +1,118 @@
-:root {
-  --colour-lightest: #e0aaff;
-  --colour-light-bg: #c77dff;
-  --colour-mid-1: #9d4edd;
-  --colour-mid-2: #7b2cbf;
-  --colour-primary: #7b2cbf; /* buttons */
-  --colour-dark-1: #5a189a;
-  --colour-dark-2: #3c096c;
-  --colour-dark-text: #240046;
-  --colour-darkest: #10002b;
+/* ------------------------------------------------------------------ */
+/* 0. CSS Variables & Base Styles */
+/* ------------------------------------------------------------------ */
 
-  /* Using a standard danger color for delete actions */
+:root {
+  /* Primary Colour Palette */
+  --colour-lightest: #e0aaff; /* borders */
+  --colour-light-bg: #c77dff; /* checked status, soft highlights */
+  --colour-mid-1: #9d4edd; /* borders */
+  --colour-mid-2: #7b2cbf;
+  --colour-primary: #7b2cbf; /* buttons, active states */
+  --colour-dark-1: #5a189a; /* hovers */
+  --colour-dark-2: #3c096c; /* headings */
+  --colour-dark-text: #240046; /* main body text */
+  --colour-darkest: #10002b; /* navigation */
+
+  /* Neutral Colours */
+  --colour-neutral-light: #f8f9fa; /*body/hover states */
+  --colour-neutral-border: #e2e8f0; /* borders */
+  --colour-neutral-text-subtle: #718096; /* subtle text  */
+  --colour-text-placeholder: #a0aec0; /* placeholders */
+
+  /* Status/Priority */
   --colour-danger: #d74723;
   --colour-danger-hover: #b9300e;
+  --priority-high: #c53030;
+  --priority-medium: #dd6b20;
+  --priority-low: #68d391;
+
+  /* Spacing Units */
+  --space-xs: 0.5rem;
+  --space-s: 1rem;
+  --space-m: 1.5rem;
+  --space-l: 2rem;
+  --space-xl: 3rem;
+  --space-xxl: 5rem;
 }
 
+/* Base HTML, Body Styles */
 html {
   font-size: 62.5%; /* 1rem = 10px */
   cursor: default;
   scrollbar-width: thin;
   height: 100%;
 }
+
 * {
   box-sizing: border-box;
 }
+
 body {
   /* Font size, line-height, font-family */
   font: 1.6rem/150% 'Monsterrat', Helvetica, Arial, sans-serif;
-  /*  top and bottom margins 0,  auto left and right */
   margin: 0;
   min-height: 100vh;
-  display: flex; /* Turn body into flex container */
-  flex-direction: column; /* Main axis */
-  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column; /* stacks main and footer vertically */
+  background-color: var(--colour-neutral-light);
   color: var(--colour-dark-text);
+  overflow-x: hidden;
 }
 
 footer {
   text-align: center;
-  padding: 1rem 0;
-  position: relative;
-  bottom: 0;
-  margin-left: 12rem;
+  padding: var(--space-s) 0;
+  margin-left: 12rem; /* Separate from nav width */
+  margin-top: auto;
 }
-
 footer a {
   color: var(--colour-primary);
 }
 
+/* Main Content Area */
 main {
   flex-grow: 1;
-  padding: 2rem 3rem;
+  padding: var(--space-l) var(--space-xl);
   overflow-y: auto; /* Scroll bar if content exceeds space */
   margin-left: 12rem;
 }
 
+/* Heading Styles */
 h1 {
   font-size: 4rem;
   color: var(--colour-dark-1);
   font-weight: 700;
+  margin-top: 0;
+  margin-bottom: var(--space-l);
 }
 h2 {
   font-size: 2rem;
   color: var(--colour-dark-2);
+  margin-top: 0;
+}
+h3 {
+  font-size: 1.8rem;
+  color: var(--colour-dark-2);
+  margin-top: 0;
 }
 
 /* ------------------------------------------------------------------ */
-/* Main Header */
+/* 1. Dashboard Layout & Common Widget Styles */
+/* ------------------------------------------------------------------ */
+
+/* Main Header Section */
 .main-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5rem;
+  margin-bottom: var(--space-xxl);
 }
-
 .app-logo {
   font-size: 2.8rem;
   color: var(--colour-primary);
   margin: 0;
 }
-
 .profile-avatar {
   width: 40px;
   height: 40px;
@@ -87,57 +121,87 @@ h2 {
   cursor: pointer;
 }
 
-/* ------------------------------------------------------ */
-/* Dashboard Grid Layout */
+/* Dashoboard Grid (L/R Columns) */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: 2rem;
+  gap: var(--space-l);
 }
 
-/* ------------------------------------------------------ */
-/* Form Styles */
+.widget {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: var(--space-l) var(--space-xl);
+  border: 1px solid var(--colour-lightest);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px 2px rgba(0, 0, 0, 0.05);
+  margin-bottom: var(--space-l);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow-x: hidden;
+}
+.widget:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 12px -2px rgb(0 0 0 / 0.08),
+    0 4px 8px -4px rgb(0 0 0 / 0.08);
+}
+
+.widget-footer {
+  text-align: left;
+  padding: var(--space-m) var(--space-xs);
+}
+.widget-footer a {
+  color: var(--colour-neutral-text-subtle);
+  text-decoration: none;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+.widget-footer a:hover {
+  color: var(--colour-primary);
+  text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ */
+/* 2. Form Element Styling (Common & Specific) */
+/* ------------------------------------------------------------------ */
+
 button,
 .btn {
   text-decoration: none;
   background-color: var(--colour-primary);
   color: #fff;
   border: none;
-  padding: 0.6em 1.2em;
-  border-radius: 8px;
+  padding: var(--space-xs) var(--space-l);
+  border-radius: 12px;
   cursor: pointer;
   font-size: 1.3rem;
   margin-left: 0.8em;
   transition: background-color 0.2s ease;
   font-weight: 600;
 }
-button:hover {
+button:hover,
+.btn:hover {
   background-color: var(--colour-dark-1);
 }
+.submit-btn {
+  margin-left: 0;
+}
+.secondary-btn {
+  background-color: var(--colour-neutral-border);
+  color: var(--colour-neutral-text-subtle);
+}
+.secondary-btn:hover {
+  background-color: var(--colour-neutral-text-subtle);
+  color: #fff;
+}
 
+/* General inputs, selects, texareas styling */
 input,
 select,
 textarea {
   font-family: inherit;
   font-size: 100%;
+  width: 100%;
 }
-
-fieldset {
-  border: 1px solid var(--colour-mid-1);
-}
-fieldset legend {
-  font-size: 1.5rem;
-  color: var(--colour-dark-text);
-  padding: 0.5em;
-}
-
-textarea {
-  overflow: auto;
-  overflow-wrap: break-word;
-  resize: vertical;
-  min-height: 10rem;
-}
-
 input[type='text'],
 input[type='date'],
 textarea {
@@ -147,31 +211,79 @@ textarea {
   margin: 0 0 1em 0;
   padding: 0.5em;
   width: 100%;
-}
-input[type='text']::placeholder,
-textarea::placeholder {
-  color: #a0aec0;
-}
-input[type='submit'] {
-  background-color: var(--colour-primary);
-  color: white;
-  border: none;
-  padding: 1em 1.5em;
-  border-radius: 12px;
-  cursor: pointer;
-  font-size: 1.3rem;
-  margin-left: 0.8em;
-  transition: background-color 0.2s ease;
-  font-weight: 600;
+  resize: none;
 }
 
-input[type='submit']:hover,
-input[type='submit']:focus {
-  background-color: var(--colour-dark-1);
+.form-field,
+.dropdown {
+  flex-grow: 1;
+  border: 2px solid var(--colour-mid-1);
+  border-radius: 8px;
+  padding: var(--space-xs);
+  margin: 0;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-field:focus,
+.dropdown:focus,
+input[type='date']:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--colour-primary);
+  box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.15);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--colour-text-placeholder);
+}
+
+textarea.form-field {
+  overflow: auto;
+  overflow-wrap: break-word;
+  min-height: 10rem;
+}
+
+.dropdown {
+  padding: 0.4em 0.5em;
+  outline: none;
+  font-size: 1.2rem;
+  border: 2px solid var(--colour-mid-1);
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  appearance: none; /* Remove default styling */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237b2cbf' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); /* Custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 0.8em center;
+  background-size: 1.2em;
+  min-width: 100px;
+  box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.15);
+}
+
+fieldset {
+  border: 1px solid var(--colour-mid-1);
+  border-radius: 8px;
+  padding: var(--space-l);
+  margin: 0;
+}
+
+.form-group,
+.modal-form-group {
+  margin-bottom: var(--space-s);
+}
+.form-group label,
+.modal-form-group label {
+  display: block;
+  margin-bottom: var(--space-s);
+  font-weight: 600;
+  color: var(--colour-dark-text);
 }
 
 /* ------------------------------------------------------------------ */
-/* Navigation styling */
+/* 3. Navigation Styling */
+/* ------------------------------------------------------------------ */
 nav {
   width: 12rem;
   height: 100vh;
@@ -180,29 +292,25 @@ nav {
   left: 0;
   top: 0;
 }
-
 nav ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
-
 nav li a {
   display: flex;
   align-items: center;
-  padding: 1rem 1.5rem;
+  padding: var(--space-s) var(--space-m);
   text-decoration: none;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-s);
   transition: background-color 0.2s ease, color 0.2s ease;
   color: var(--colour-light-bg);
 }
-
 nav li:hover a {
   background-color: var(--colour-dark-2);
   color: white;
   font-weight: bold;
 }
-
 nav li.active a {
   background-color: var(--colour-primary);
   color: white;
@@ -210,60 +318,41 @@ nav li.active a {
 }
 
 /* ------------------------------------------------------------------ */
+/* 4. Dashboard Widget Specifics */
+/* ------------------------------------------------------------------ */
+
 /* Goal Focus Widget */
 .goal-focus-widget {
   background-color: #faf5ff;
-  border-radius: 12px;
-  padding: 2rem 3.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
 }
-
 .goal-input-group {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-s);
   align-items: center;
 }
-
 .goal-input-group input[type='text'] {
   font-size: 1.6rem;
   margin: 0;
 }
-.goal-input-group input[type='text']:focus {
-  outline: none;
-  border-color: var(--colour-primary);
-  box-shadow: 0 0 0 3px rgba(123, 44, 191, 0.15);
-}
 
-/* ------------------------------------------------------------------ */
 /* Task List Widget */
-.task-widget {
-  background-color: #fff;
-  border-radius: 12px;
-  padding: 1rem 2.5rem;
-  border: 1px solid var(--colour-lightest);
-  margin-bottom: 2rem;
-  flex-grow: 1;
-  overflow-x: hidden;
-}
 .task-widget h2 {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-l);
 }
-
 .widget-tabs {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-s);
+  margin-bottom: var(--space-m);
 }
 .tab-btn {
   background: none;
   border: none;
-  color: #718096;
+  color: var(--colour-neutral-text-subtle);
   font-size: 1.4rem;
   font-weight: 600;
   padding: 0.5rem 0.2rem;
   border-bottom: 2px solid transparent;
-  border-radius: 0px;
+  border-radius: 0;
   margin-left: 0;
 }
 .tab-btn:hover {
@@ -286,12 +375,12 @@ nav li.active a {
   flex-direction: column;
   width: 100%;
   padding: 0.3rem 0.5rem;
-  border-bottom: 0.5px solid #e2e8f0;
-  transition: all 0.3s ease-out;
+  border-bottom: 0.5px solid var(--colour-neutral-border);
+  transition: all 0.3s ease;
   opacity: 1;
   transform: translateX(0);
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-m);
 }
 .widget-task-item.slide-out {
   opacity: 0;
@@ -304,17 +393,17 @@ nav li.active a {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 5px;
+  margin-bottom: var(--space-s);
+  transition: all 0.3s ease-out;
 }
-
-.is-expanded .expand-icon {
-  transform: rotate(90deg);
+.task-row:hover {
+  background-color: var(--colour-neutral-light);
 }
 
 .task-info {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-s);
   flex-grow: 1;
 }
 .task-info span {
@@ -322,13 +411,13 @@ nav li.active a {
   font-weight: 500;
 }
 
-/* Sub Task */
+/* Sub Task stying */
 .sub-tasks {
   list-style: none;
   max-height: 0;
   opacity: 0;
   transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
-  padding-left: 5rem;
+  padding-left: var(--space-xxl);
   display: none; /* Hide by default */
 }
 .sub-tasks .widget-task-item {
@@ -337,21 +426,20 @@ nav li.active a {
 .widget-task-item.expanded > .sub-tasks {
   max-height: 500px;
   opacity: 1;
-  display: flex;
+  display: block;
 }
 
 .expand-icon {
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
   transform: rotate(0deg);
-  margin-right: 5px;
+  margin-right: var(--space-s);
   min-width: 16px;
   min-height: 16px;
   stroke: var(--colour-dark-text);
 }
 .widget-task-item.expanded .expand-icon {
   transform: rotate(90deg);
-  color: var(--colour-primary);
 }
 
 .status-icon {
@@ -376,7 +464,7 @@ nav li.active a {
 .task-metadata {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--space-s);
 }
 
 .priority-dot {
@@ -391,47 +479,27 @@ nav li.active a {
 .priority-dot.medium {
   background-color: #dd6b20;
 }
+.priority-dot.low {
+  background-color: var(--priority-low);
+}
 
 .task-due-date {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: var(--space-s);
   font-size: 1rem;
   color: #718096;
   font-weight: 500;
 }
-.widget-footer {
-  text-align: left;
-  padding: 1.5rem 0.5rem;
-}
-.widget-footer a {
-  color: #718096;
-  text-decoration: none;
-  font-size: 1.4rem;
-  font-weight: 600;
-}
-.widget-footer a:hover {
-  color: var(--colour-primary);
-  text-decoration: underline;
-}
 
-/* ------------------------------------------------------------------ */
 /* Project Widget Styling */
-.projects-widget {
-  background-color: #fff;
-  border: 1px solid var(--colour-lightest);
-  border-radius: 12px;
-  padding: 1rem 2.5rem;
-  margin-bottom: 2rem;
-}
-
 .project-list {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-s);
 }
 
 .project-item {
@@ -444,18 +512,14 @@ nav li.active a {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .project-item:hover {
-  background-color: #f8f9fa;
+  background-color: var(--colour-neutral-light);
 }
-.project-item:hover .project-name {
-  font-weight: bold;
-  transform: scale(1.01);
-}
+
 .project-info {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--space-m);
 }
 .project-icon {
   width: 24px;
@@ -471,26 +535,18 @@ nav li.active a {
 .project-progress {
   width: 100px;
   height: 4px;
-  background-color: #e2e8f0;
+  background-color: var(--colour-neutral-border);
   border-radius: 4px;
   overflow: hidden;
 }
 .progress-bar-fill {
-  width: 70px;
+  width: 70px; /* placeholder */
   height: 100%;
   background-color: var(--colour-primary);
   border-radius: 4px;
 }
 
-/* ------------------------------------------------------------------ */
 /* Map Widget Styling */
-.graph-preview-widget {
-  background-color: #fff;
-  border: 1px solid var(--colour-lightest);
-  border-radius: 12px;
-  padding: 1rem 2.5rem;
-  margin-bottom: 2rem;
-}
 .graph-preview-widget h3 {
   font-size: 1.8rem;
   margin: 0;
@@ -508,11 +564,12 @@ nav li.active a {
 }
 
 /* ------------------------------------------------------------------ */
-/* Floating Action Button */
+/* 5. Floating Action Button */
+/* ------------------------------------------------------------------ */
 .fab {
   position: fixed;
-  bottom: 2rem;
-  right: 2rem;
+  bottom: var(--space-l);
+  right: var(--space-l);
   width: 56px;
   height: 56px;
   background-color: var(--colour-primary);
@@ -528,7 +585,6 @@ nav li.active a {
   z-index: 1000;
   transition: background-color 0.2s ease, transform 0.2s ease;
 }
-
 .fab:hover {
   background-color: var(--colour-dark-1);
   transform: scale(1.1);
@@ -536,7 +592,8 @@ nav li.active a {
 }
 
 /* ------------------------------------------------------------------ */
-/* Calendar Chart Styling */
+/* 6. Calendar Page -> use variables to-do */
+/* ------------------------------------------------------------------ */
 .calendar-container {
   border: 1px solid #2d3748;
   background-color: #fff;
@@ -560,7 +617,6 @@ nav li.active a {
 .date-cell {
   background-color: #fff;
 }
-
 .day-name {
   font-weight: 600;
   height: 50px;
@@ -568,14 +624,12 @@ nav li.active a {
   align-items: center;
   justify-content: center;
 }
-
 .date-cell {
   padding: 0.5rem;
   display: flex;
   align-items: flex-end;
   flex-direction: column;
 }
-
 .current-day .date-number {
   background-color: var(--colour-primary);
   color: #fff;
@@ -612,7 +666,9 @@ nav li.active a {
   text-overflow: ellipsis;
 }
 
-/* ------ Modal Styles ------ */
+/* ------------------------------------------------------------------ */
+/* 7. Modal Popups */
+/* ------------------------------------------------------------------ */
 .modal-container {
   position: fixed;
   top: 0;
@@ -625,7 +681,7 @@ nav li.active a {
   background-color: rgba(0, 0, 0, 0.8);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease-out visibility 0.3s ease-out;
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
   pointer-events: none; /* Prevent interaction when not active */
   display: none;
 }
@@ -638,7 +694,7 @@ nav li.active a {
 
 .modal-content {
   background-color: #fff;
-  padding: 3rem;
+  padding: var(--space-xl);
   border-radius: 12px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   position: relative;
@@ -655,11 +711,11 @@ nav li.active a {
 
 .close-modal-btn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: var(--space-s);
+  right: var(--space-s);
   background: none;
   border: none;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--colour-dark-text);
   cursor: pointer;
   transition: color 0.2s ease;
@@ -671,9 +727,96 @@ nav li.active a {
   background: none;
 }
 
+.modal-content .form-group {
+  margin-bottom: var(--space-m);
+}
 .modal-content h3 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
   color: var(--colour-dark-1);
   margin-top: 0;
+}
+
+/* generate task button */
+.modal-generate-btn {
+  margin-left: 0;
+  padding: var(--space-s) var(--space-l);
+}
+
+/* modal stage transitions */
+.modal-stage {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+.modal-stage.active {
+  display: block;
+  opacity: 1;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--colour-primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+/* Loading spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Generated graph placeholder */
+.generated-graph-placeholder {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Modal actions button group */
+.modal-actions {
+  display: flex;
+  justify-content: space-around;
+  gap: var(--space-s);
+  margin-top: var(--space-l);
+}
+
+/* ------------------------------------------------------------------ */
+/* 8. Full Task List Page Styling (all_tasks.html specific) */
+/* ------------------------------------------------------------------ */
+.task-list-container {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 2rem 3rem;
+  border: 1px solid var(--colour-lightest);
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  margin-bottom: 2rem;
+}
+.task-filters {
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--colour-neutral-border);
+  padding-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.task-filters input[type='text'] {
+  margin-bottom: 0;
+  min-width: 200px;
+  max-width: 25%;
+}
+.filter-labels {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }

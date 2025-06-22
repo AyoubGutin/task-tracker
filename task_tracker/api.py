@@ -27,6 +27,11 @@ def calendar_page():
     return render_template('calendar.html')
 
 
+@app.route('/tasks', methods=['GET'])
+def tasks_page():
+    return render_template('tasks.html')
+
+
 if __name__ == '__main__':
     """
     Run the Flask app
